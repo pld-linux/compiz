@@ -8,7 +8,12 @@ Group:		X11
 %define		_snap	20060220
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	32d9d09cecfe9dbee1f0fd2cfd8d39b1
-BuildRequires:	xorg-lib-libXext-devel
+BuildRequires:	avahi-glib-devel
+BuildRequires:	control-center-devel
+BuildRequires:	gnome-desktop-devel
+BuildRequires:	gnome-menus-libs-devel
+BuildRequires:	libsvg-cairo-devel
+BuildRequires:	libwnck-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
