@@ -8,10 +8,11 @@ Group:		X11
 %define		_snap	20060220
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	32d9d09cecfe9dbee1f0fd2cfd8d39b1
+Patch0:		%{name}-wobbly.patch
 BuildRequires:	avahi-glib-devel
 BuildRequires:	control-center-devel
 BuildRequires:	gnome-desktop-devel
-BuildRequires:	gnome-menus-libs-devel
+BuildRequires:	gnome-menus-devel
 BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libwnck-devel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -24,6 +25,7 @@ and it is designed to run well on most graphics hardware.
 
 %prep
 %setup -q -n %{name}-%{_snap}
+%patch0 -p0
 
 %build
 autoreconf -v --install
