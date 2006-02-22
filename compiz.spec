@@ -36,6 +36,18 @@ GLX_EXT_texture_from_pixmap w celu wi±zania przekierowanych okien
 do tekstur. Posiada elastyczny system wtyczek i jest tak
 zaprojektowany, by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 
+%package devel
+Summary:	Header files for compiz
+Summary(pl):	Pliki nag³ówkowe dla compiza
+Group:		Development
+Requires:	%{name} = %{version}-%{release}
+
+%description devel
+Header files for compiz.
+
+%description devel -l pl
+Pliki nag³ówkowe dla compiza.
+
 %prep
 %setup -q -n %{name}-%{_snap}
 %patch0 -p0
@@ -67,5 +79,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %attr(755,root,root) %{_libdir}/window-manager-settings/*.so
 %{_datadir}/compiz
+%{_datadir}/gnome/wm-properties/*
 
-# TODO: devel package
+%files devel
+%defattr(644,root,root,755)
+%{_includedir}/compiz
+%{_pkgconfigdir}/*
