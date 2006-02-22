@@ -9,12 +9,15 @@ Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	32d9d09cecfe9dbee1f0fd2cfd8d39b1
 Patch0:		%{name}-wobbly.patch
+BuildRequires:	QtCore-devel
+BuildRequires:	QtGui-devel
 BuildRequires:	avahi-glib-devel
 BuildRequires:	control-center-devel
 BuildRequires:	gnome-desktop-devel
 BuildRequires:	gnome-menus-devel
 BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libwnck-devel
+BuildRequires:	qt4-build
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -30,11 +33,11 @@ and it is designed to run well on most graphics hardware.
 %build
 autoreconf -v --install
 
-# kde is not really ready
 %configure \
 	--enable-svg \
 	--enable-libsvg-cairo \
-	--enable-gnome
+	--enable-gnome \
+	--enable-kde
 
 %{__make}
 
