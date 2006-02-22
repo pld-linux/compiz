@@ -11,7 +11,7 @@ License:	GPL/MIT
 Group:		X11
 %define		_snap	20060222
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	32d9d09cecfe9dbee1f0fd2cfd8d39b1
+# Source0-md5:	054cfcedab9282f66e5ab89edbd49c35
 Patch0:		%{name}-wobbly.patch
 BuildRequires:	QtCore-devel
 BuildRequires:	QtGui-devel
