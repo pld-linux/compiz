@@ -1,11 +1,15 @@
+#
+# TODO:
+# - separate gnome control-panel plugin (it doesn't seem to work anyway)
+#
 Summary:	OpenGL window and compositing manager
-Summary(pl):	OpenGL-owy mened¿er okien i kompozycji
+Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
 Version:	0.0.3
-Release:	1
+Release:	2
 License:	GPL/MIT
 Group:		X11
-%define		_snap	20060220
+%define		_snap	20060222
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	32d9d09cecfe9dbee1f0fd2cfd8d39b1
 Patch0:		%{name}-wobbly.patch
@@ -25,6 +29,12 @@ Compiz is an OpenGL compositing manager that use
 GLX_EXT_texture_from_pixmap for binding redirected top-level
 windows to texture objects. It has a flexible plug-in system
 and it is designed to run well on most graphics hardware.
+
+%description -l pl
+Compiz jest OpenGL-owym zarz±dc± sk³adania, u¿ywaj±cym rozszerzenia
+GLX_EXT_texture_from_pixmap w celu wi±zania przekierowanych okien
+do tekstur. Posiada elastyczny system wtyczek i jest tak
+zaprojektowany, by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 
 %prep
 %setup -q -n %{name}-%{_snap}
