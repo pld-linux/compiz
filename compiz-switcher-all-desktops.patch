@@ -1,52 +1,51 @@
-diff -ruN compiz-20060222./plugins/switcher.c compiz-20060222/plugins/switcher.c
---- compiz-20060222./plugins/switcher.c	2006-02-22 03:27:31.000000000 +0100
-+++ compiz-20060222/plugins/switcher.c	2006-02-22 21:47:13.744958456 +0100
-@@ -59,6 +59,8 @@
- #define SWITCH_TIMESTEP_MAX       50.0f
- #define SWITCH_TIMESTEP_PRECISION 0.1f
+diff -ruN compiz-20060223./plugins/switcher.c compiz-20060223/plugins/switcher.c
+--- compiz-20060223./plugins/switcher.c	2006-02-23 02:36:26.000000000 +0100
++++ compiz-20060223/plugins/switcher.c	2006-02-23 16:33:23.330820040 +0100
+@@ -61,6 +61,8 @@
+ 
+ #define SWITCH_MIPMAP_DEFAULT TRUE
  
 +#define SWITCH_ALL_DESKTOPS_DEFAULT	TRUE
 +
  static char *winType[] = {
      "Toolbar",
      "Utility",
-@@ -84,7 +86,8 @@
- #define SWITCH_SCREEN_OPTION_SPEED	  4
+@@ -87,7 +89,8 @@
  #define SWITCH_SCREEN_OPTION_TIMESTEP	  5
  #define SWITCH_SCREEN_OPTION_WINDOW_TYPE  6
--#define SWITCH_SCREEN_OPTION_NUM          7
-+#define SWITCH_SCREEN_OPTION_ALL_DESKTOPS 7
-+#define SWITCH_SCREEN_OPTION_NUM          8
+ #define SWITCH_SCREEN_OPTION_MIPMAP       7
+-#define SWITCH_SCREEN_OPTION_NUM          8
++#define SWITCH_SCREEN_OPTION_ALL_DESKTOPS 8
++#define SWITCH_SCREEN_OPTION_NUM          9
  
  typedef struct _SwitchScreen {
      PreparePaintScreenProc preparePaintScreen;
-@@ -233,6 +236,11 @@
- 	    ss->wMask = compWindowTypeMaskFromStringList (&o->value);
+@@ -240,6 +243,10 @@
+     case SWITCH_SCREEN_OPTION_MIPMAP:
+ 	if (compSetBoolOption (o, value))
  	    return TRUE;
- 	}
 +	break;
 +    case SWITCH_SCREEN_OPTION_ALL_DESKTOPS:
 +	if (compSetBoolOption (o, value))
 +	    return TRUE;
-+	break;
      default:
  	break;
      }
-@@ -325,6 +333,13 @@
-     o->rest.s.nString    = nWindowTypeString;
- 
-     ss->wMask = compWindowTypeMaskFromStringList (&o->value);
+@@ -339,6 +346,13 @@
+     o->longDesc	  = "Generate mipmaps when possible for higher quality scaling";
+     o->type	  = CompOptionTypeBool;
+     o->value.b    = SWITCH_MIPMAP_DEFAULT;
 +
 +    o = &ss->opt[SWITCH_SCREEN_OPTION_ALL_DESKTOPS];
-+    o->name      = "all_dekstops";
-+    o->shortDesc = "All Desktops";
-+    o->longDesc  = "Switch between windows on all virtual desktops";
-+    o->type      = CompOptionTypeBool;
-+    o->value.b   = SWITCH_ALL_DESKTOPS_DEFAULT;
++    o->name       = "all_dekstops";
++    o->shortDesc  = "All Desktops";
++    o->longDesc   = "Switch between windows on all virtual desktops";
++    o->type       = CompOptionTypeBool;
++    o->value.b    = SWITCH_ALL_DESKTOPS_DEFAULT;
  }
  
  static void
-@@ -341,6 +356,7 @@
+@@ -355,6 +369,7 @@
  static Bool
  isSwitchWin (CompWindow *w)
  {
@@ -54,7 +53,7 @@ diff -ruN compiz-20060222./plugins/switcher.c compiz-20060222/plugins/switcher.c
      SWITCH_SCREEN (w->screen);
  
      if (!w->mapNum || w->attrib.map_state != IsViewable)
-@@ -355,6 +371,17 @@
+@@ -369,6 +384,17 @@
      if (w->state & CompWindowStateSkipPagerMask)
  	return FALSE;
  
