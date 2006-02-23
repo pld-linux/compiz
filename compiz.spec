@@ -11,7 +11,7 @@ License:	GPL/MIT
 Group:		X11
 %define		_snap	20060223
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	054cfcedab9282f66e5ab89edbd49c35
+# Source0-md5:	107d69d6f1575ebb104c0f78eff3298e
 Patch0:		%{name}-switcher-all-desktops.patch
 BuildRequires:	QtCore-devel
 BuildRequires:	QtGui-devel
