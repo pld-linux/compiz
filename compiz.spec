@@ -1,6 +1,7 @@
 #
-# TODO:
-# - separate gnome control-panel plugin (it doesn't seem to work anyway)
+# Conditional build:
+%bcond_without	gnome		# don't build gnome-window-decorator
+%bcond_with	kde		# build kde-window-decorator (currently not working)
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
@@ -13,15 +14,27 @@ Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	107d69d6f1575ebb104c0f78eff3298e
 Patch0:		%{name}-switcher-all-desktops.patch
-BuildRequires:	QtCore-devel
-BuildRequires:	QtGui-devel
+BuildRequires:	GConf2-devel
+BuildRequires:	OpenGL-devel
+BuildRequires:	glib2-devel
+BuildRequires:	libpng-devel
+BuildRequires:	libsvg-cairo-devel
+BuildRequires:	startup-notification-devel
+BuildRequires:	xorg-lib-libXcomposite
+BuildRequires:	xorg-lib-libXdamage
+BuildRequires:	xorg-lib-libXrandr
+%if %{with gnome}
 BuildRequires:	avahi-glib-devel
 BuildRequires:	control-center-devel
 BuildRequires:	gnome-desktop-devel
 BuildRequires:	gnome-menus-devel
-BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libwnck-devel
+%endif
+%if %{with kde}
+BuildRequires:	QtCore-devel
+BuildRequires:	QtGui-devel
 BuildRequires:	qt4-build
+%endif
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -48,6 +61,42 @@ Header files for compiz.
 %description devel -l pl
 Pliki nag³ówkowe dla compiza.
 
+%package gnome-settings
+Summary:	Compiz settings for gnome control panel
+Summary(pl):	Ustawienia compiza dla panelu sterowania gnome
+Group:		X11
+Requires:	%{name} = %{version}-%{release}
+
+%description gnome-settings
+Compiz settings for gnome control panel.
+
+%description gnome-settings -l pl
+Ustawienia compiza dla panelu sterowania gnome.
+
+%package gnome-decorator
+Summary:	Window decorator for gnome
+Summary(pl):	Dekorator okien dla gnome
+Group:		X11
+Requires:	%{name} = %{version}-%{release}
+
+%description gnome-decorator
+Window decorator for gnome.
+
+%description gnome-decorator -l pl
+Dekorator okien dla gnome.
+
+%package kde-decorator
+Summary:	Window decorator for KDE
+Summary(pl):	Dekorator okien dla KDE
+Group:		X11
+Requires:	%{name} = %{version}-%{release}
+
+%description kde-decorator
+Window decorator for KDE.
+
+%description kde-decorator -l pl
+Dekorator okien dla KDE.
+
 %prep
 %setup -q -n %{name}-%{_snap}
 %patch0 -p1
@@ -58,8 +107,8 @@ autoreconf -v --install
 %configure \
 	--enable-svg \
 	--enable-libsvg-cairo \
-	--enable-gnome \
-	--enable-kde
+	--%{?with_gnome:en}%{!?with_gnome:dis}able-gnome \
+	--%{?with_kde:en}%{!?with_kde:dis}able-kde
 
 %{__make}
 
@@ -74,10 +123,9 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README TODO
-%attr(755,root,root) %{_bindir}/*
+%attr(755,root,root) %{_bindir}/compiz
 %dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
-%attr(755,root,root) %{_libdir}/window-manager-settings/*.so
 %{_datadir}/compiz
 %{_datadir}/gnome/wm-properties/*
 
@@ -85,3 +133,19 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %{_includedir}/compiz
 %{_pkgconfigdir}/*
+
+%if %{with gnome}
+%files gnome-settings
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/window-manager-settings/*.so
+
+%files gnome-decorator
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/gnome-window-decorator
+%endif
+
+%if %{with kde}
+%files kde-decorator
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/kde-window-decorator
+%endif
