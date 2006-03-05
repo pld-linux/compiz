@@ -25,6 +25,7 @@ BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	libpng-devel
 BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libtool
+BuildRequires:	pkgconfig
 BuildRequires:	startup-notification-devel >= 0.7
 BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libXcomposite-devel
