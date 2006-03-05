@@ -1,5 +1,6 @@
 #
 # Conditional build:
+%bcond_without	gconf		# don't build gconf plugin
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (currently not working)
 #
@@ -14,21 +15,26 @@ Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	41917dac89790d83f9d1d634f2491858
 Patch0:		%{name}-switcher-all-desktops.patch
-BuildRequires:	GConf2-devel
+%if %{with gconf} || %{with gnome}
+BuildRequires:	GConf2-devel >= 2.0
+%endif
 BuildRequires:	OpenGL-devel
-BuildRequires:	glib2-devel
+BuildRequires:	autoconf >= 2.57
+BuildRequires:	automake
+BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	libpng-devel
 BuildRequires:	libsvg-cairo-devel
-BuildRequires:	startup-notification-devel
-BuildRequires:	xorg-lib-libXcomposite
-BuildRequires:	xorg-lib-libXdamage
-BuildRequires:	xorg-lib-libXrandr
+BuildRequires:	libtool
+BuildRequires:	startup-notification-devel >= 0.7
+BuildRequires:	xorg-lib-libSM-devel
+BuildRequires:	xorg-lib-libXcomposite-devel
+BuildRequires:	xorg-lib-libXdamage-devel
+BuildRequires:	xorg-lib-libXrandr-devel
 %if %{with gnome}
-BuildRequires:	avahi-glib-devel
-BuildRequires:	control-center-devel
-BuildRequires:	gnome-desktop-devel
-BuildRequires:	gnome-menus-devel
-BuildRequires:	libwnck-devel
+BuildRequires:	control-center-devel >= 2.0
+BuildRequires:	gnome-desktop-devel >= 2.0
+BuildRequires:	gtk+2-devel >= 2:2.8.0
+BuildRequires:	libwnck-devel >= 2.0
 %endif
 %if %{with kde}
 BuildRequires:	QtCore-devel
@@ -53,7 +59,14 @@ zaprojektowany, by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 Summary:	Header files for compiz
 Summary(pl):	Pliki nag³ówkowe dla compiza
 Group:		Development
-Requires:	%{name} = %{version}-%{release}
+# (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
+Requires:	OpenGL-devel
+Requires:	libpng-devel
+Requires:	startup-notification-devel >= 0.7
+Requires:	xorg-lib-libSM-devel
+Requires:	xorg-lib-libXcomposite-devel
+Requires:	xorg-lib-libXdamage-devel
+Requires:	xorg-lib-libXrandr-devel
 
 %description devel
 Header files for compiz.
@@ -105,8 +118,10 @@ Dekorator okien dla KDE.
 autoreconf -v --install
 
 %configure \
+	--disable-static \
 	--enable-svg \
 	--enable-libsvg-cairo \
+	%{!?with_gconf:--disable-gconf} \
 	--%{?with_gnome:en}%{!?with_gnome:dis}able-gnome \
 	--%{?with_kde:en}%{!?with_kde:dis}able-kde
 
@@ -115,7 +130,10 @@ autoreconf -v --install
 %install
 rm -rf $RPM_BUILD_ROOT
 
-%{__make} install DESTDIR=$RPM_BUILD_ROOT
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -127,12 +145,14 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{_datadir}/compiz
+%if %{with gnome}
 %{_datadir}/gnome/wm-properties/*
+%endif
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/compiz
-%{_pkgconfigdir}/*
+%{_pkgconfigdir}/compiz.pc
 
 %if %{with gnome}
 %files gnome-settings
