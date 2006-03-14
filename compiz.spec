@@ -8,10 +8,10 @@ Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
 Version:	0.0.6
-Release:	1
+Release:	2
 License:	GPL/MIT
 Group:		X11
-%define		_snap	20060307
+%define		_snap	20060314
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	516d5510394476e594ad26634aac84a6
 Patch0:		%{name}-switcher-all-desktops.patch
@@ -42,6 +42,7 @@ BuildRequires:	QtCore-devel
 BuildRequires:	QtGui-devel
 BuildRequires:	qt4-build
 %endif
+Obsoletes:	compiz-opacity
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
