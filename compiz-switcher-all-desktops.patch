@@ -1,29 +1,29 @@
-diff -ruN compiz-20060223./plugins/switcher.c compiz-20060223/plugins/switcher.c
---- compiz-20060223./plugins/switcher.c	2006-02-23 02:36:26.000000000 +0100
-+++ compiz-20060223/plugins/switcher.c	2006-02-23 16:33:23.330820040 +0100
-@@ -61,6 +61,8 @@
+diff -ruN compiz-20060317./plugins/switcher.c compiz-20060317/plugins/switcher.c
+--- compiz-20060317./plugins/switcher.c	2006-03-17 11:06:52.000000000 +0100
++++ compiz-20060317/plugins/switcher.c	2006-03-17 16:21:17.806835304 +0100
+@@ -63,6 +63,8 @@
  
- #define SWITCH_MIPMAP_DEFAULT TRUE
+ #define SWITCH_BRINGTOFRONT_DEFAULT FALSE
  
-+#define SWITCH_ALL_DESKTOPS_DEFAULT	TRUE
++#define SWITCH_ALL_DESKTOPS_DEFAULT TRUE
 +
- static char *winType[] = {
-     "Toolbar",
-     "Utility",
-@@ -87,7 +89,8 @@
- #define SWITCH_SCREEN_OPTION_TIMESTEP	  5
- #define SWITCH_SCREEN_OPTION_WINDOW_TYPE  6
- #define SWITCH_SCREEN_OPTION_MIPMAP       7
--#define SWITCH_SCREEN_OPTION_NUM          8
-+#define SWITCH_SCREEN_OPTION_ALL_DESKTOPS 8
-+#define SWITCH_SCREEN_OPTION_NUM          9
+ #define SWITCH_SATURATION_DEFAULT 100
+ #define SWITCH_SATURATION_MIN     0
+ #define SWITCH_SATURATION_MAX     100
+@@ -105,7 +107,8 @@
+ #define SWITCH_SCREEN_OPTION_BRIGHTNESS   9
+ #define SWITCH_SCREEN_OPTION_OPACITY      10
+ #define SWITCH_SCREEN_OPTION_BRINGTOFRONT 11
+-#define SWITCH_SCREEN_OPTION_NUM          12
++#define SWITCH_SCREEN_OPTION_ALL_DESKTOPS 12
++#define SWITCH_SCREEN_OPTION_NUM          13
  
  typedef struct _SwitchScreen {
      PreparePaintScreenProc preparePaintScreen;
-@@ -240,6 +243,10 @@
-     case SWITCH_SCREEN_OPTION_MIPMAP:
- 	if (compSetBoolOption (o, value))
+@@ -292,6 +295,10 @@
+ 	    ss->bringToFront = o->value.b;
  	    return TRUE;
+ 	}
 +	break;
 +    case SWITCH_SCREEN_OPTION_ALL_DESKTOPS:
 +	if (compSetBoolOption (o, value))
@@ -31,21 +31,21 @@ diff -ruN compiz-20060223./plugins/switcher.c compiz-20060223/plugins/switcher.c
      default:
  	break;
      }
-@@ -339,6 +346,13 @@
-     o->longDesc	  = "Generate mipmaps when possible for higher quality scaling";
+@@ -425,6 +432,13 @@
+     o->longDesc	  = "Bring selected window to front";
      o->type	  = CompOptionTypeBool;
-     o->value.b    = SWITCH_MIPMAP_DEFAULT;
+     o->value.b    = SWITCH_BRINGTOFRONT_DEFAULT;
 +
 +    o = &ss->opt[SWITCH_SCREEN_OPTION_ALL_DESKTOPS];
-+    o->name       = "all_dekstops";
++    o->name	  = "all_desktops";
 +    o->shortDesc  = "All Desktops";
-+    o->longDesc   = "Switch between windows on all virtual desktops";
-+    o->type       = CompOptionTypeBool;
++    o->longDesc	  = "Switch between windows on all virtual desktops";
++    o->type	  = CompOptionTypeBool;
 +    o->value.b    = SWITCH_ALL_DESKTOPS_DEFAULT;
  }
  
  static void
-@@ -355,6 +369,7 @@
+@@ -441,6 +455,7 @@
  static Bool
  isSwitchWin (CompWindow *w)
  {
@@ -53,19 +53,19 @@ diff -ruN compiz-20060223./plugins/switcher.c compiz-20060223/plugins/switcher.c
      SWITCH_SCREEN (w->screen);
  
      if (!w->mapNum || w->attrib.map_state != IsViewable)
-@@ -369,6 +384,17 @@
+@@ -455,6 +470,17 @@
      if (w->state & CompWindowStateSkipPagerMask)
  	return FALSE;
  
 +    if (!ss->opt[SWITCH_SCREEN_OPTION_ALL_DESKTOPS].value.b)
 +    {
-+	    /* only switch between windows in the current workspace
-+	       Tiago Sousa <mirage@kaotik.org> */
-+	    workspaceX = w->screen->width * w->screen->x;
-+	    winRealX = w->serverX + workspaceX;
-+	    winWorkspace = floor((double)winRealX / (double)w->screen->width);
-+	    if (winWorkspace != w->screen->x)
-+		return FALSE;
++	/* only switch between windows in the current workspace
++	   Tiago Sousa <mirage@kaotik.org> */
++	workspaceX = w->screen->width * w->screen->x;
++	winRealX = w->serverX + workspaceX;
++	winWorkspace = floor((double)winRealX / (double)w->screen->width);
++	if (winWorkspace != w->screen->x)
++	    return FALSE;
 +    }
 +
      return TRUE;
