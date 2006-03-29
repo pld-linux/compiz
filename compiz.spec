@@ -4,14 +4,15 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (currently not working)
 #
+%define		_snap	20060329
+#
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
 Version:	0.0.7
-Release:	1
+Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
-%define		_snap	20060329
 Source0:	%{name}-%{_snap}.tar.bz2
 # Source0-md5:	568564b3fc4ee9583df3631c1dca8e28
 Patch0:		%{name}-switcher-all-desktops.patch
