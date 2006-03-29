@@ -11,9 +11,9 @@ Version:	0.0.7
 Release:	1
 License:	GPL/MIT
 Group:		X11
-%define		_snap	20060320
+%define		_snap	20060329
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	0cc0444e3f7c09894597674a61c42abf
+# Source0-md5:	7940c13e4236a29da793248b01cc6805
 Patch0:		%{name}-switcher-all-desktops.patch
 %if %{with gconf} || %{with gnome}
 BuildRequires:	GConf2-devel >= 2.0
