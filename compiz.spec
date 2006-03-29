@@ -13,7 +13,7 @@ License:	GPL/MIT
 Group:		X11
 %define		_snap	20060329
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	7940c13e4236a29da793248b01cc6805
+# Source0-md5:	568564b3fc4ee9583df3631c1dca8e28
 Patch0:		%{name}-switcher-all-desktops.patch
 %if %{with gconf} || %{with gnome}
 BuildRequires:	GConf2-devel >= 2.0
