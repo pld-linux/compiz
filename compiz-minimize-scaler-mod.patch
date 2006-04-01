@@ -1,0 +1,303 @@
+Index: plugins/minimize.c
+===================================================================
+RCS file: /cvs/xorg/app/compiz/plugins/minimize.c,v
+retrieving revision 1.3
+diff -u -r1.3 minimize.c
+--- plugins/minimize.c	31 Mar 2006 11:22:34 -0000	1.3
++++ plugins/minimize.c	1 Apr 2006 16:20:55 -0000
+@@ -26,6 +26,7 @@
+ #include <X11/Xatom.h>
+ 
+ #include <stdlib.h>
++#include <stdio.h>
+ #include <string.h>
+ #include <math.h>
+ 
+@@ -41,6 +42,8 @@
+ #define MIN_TIMESTEP_MAX       50.0f
+ #define MIN_TIMESTEP_PRECISION 0.1f
+ 
++#define FAKE_ICON_SIZE         4
++
+ static char *winType[] = {
+     "Toolbar",
+     "Utility",
+@@ -61,7 +64,9 @@
+ #define MIN_SCREEN_OPTION_SPEED       0
+ #define MIN_SCREEN_OPTION_TIMESTEP    1
+ #define MIN_SCREEN_OPTION_WINDOW_TYPE 2
+-#define MIN_SCREEN_OPTION_NUM         3
++#define MIN_SCREEN_OPTION_ON_CREATE   3
++#define MIN_SCREEN_OPTION_CENTER      4
++#define MIN_SCREEN_OPTION_NUM         5
+ 
+ typedef struct _MinScreen {
+     int	windowPrivateIndex;
+@@ -81,6 +86,8 @@
+     unsigned int wMask;
+ 
+     int moreAdjust;
++    Bool scaleInNewWindows;
++    Bool scaleFromCenter;
+ } MinScreen;
+ 
+ typedef struct _MinWindow {
+@@ -95,6 +102,7 @@
+     int state, newState;
+ 
+     int unmapCnt;
++    int destroyCnt;
+ } MinWindow;
+ 
+ #define GET_MIN_DISPLAY(d)				    \
+@@ -119,6 +127,23 @@
+ 
+ #define NUM_OPTIONS(s) (sizeof ((s)->opt) / sizeof (CompOption))
+ 
++static Bool
++getMousePointerXY(CompScreen *s, short *x, short *y)
++{
++    Window w1, w2;
++    int xp, yp, xj, yj;
++    unsigned int m;
++    
++    if (XQueryPointer (s->display->display, s->root, &w1, &w2, &xj, &yj, &xp, &yp, &m))
++    {
++        *x = xp;
++        *y = yp;
++        return TRUE;
++    }
++    
++    return FALSE;
++}
++
+ static CompOption *
+ minGetScreenOptions (CompScreen *screen,
+ 		     int	*count)
+@@ -164,6 +189,19 @@
+ 	    ms->wMask = compWindowTypeMaskFromStringList (&o->value);
+ 	    return TRUE;
+ 	}
++	break;
++    case MIN_SCREEN_OPTION_ON_CREATE:
++	if (compSetBoolOption (o, value))
++	{
++	    ms->scaleInNewWindows = o->value.b;
++	    return TRUE;
++	}
++    case MIN_SCREEN_OPTION_CENTER:
++	if (compSetBoolOption (o, value))
++	{
++	    ms->scaleFromCenter = o->value.b;
++	    return TRUE;
++	}
+     default:
+ 	break;
+     }
+@@ -210,8 +248,22 @@
+ 	o->value.list.value[i].s = strdup (winType[i]);
+     o->rest.s.string     = windowTypeString;
+     o->rest.s.nString    = nWindowTypeString;
+-
+     ms->wMask = compWindowTypeMaskFromStringList (&o->value);
++
++    o = &ms->opt[MIN_SCREEN_OPTION_ON_CREATE];
++    o->name      = "zoom_created_windows";
++    o->shortDesc = "Zoom Created Windows";
++    o->longDesc  = "Zooms created windows in from cursor/center";
++    o->type      = CompOptionTypeBool;
++    o->value.b   = TRUE;
++    
++    o = &ms->opt[MIN_SCREEN_OPTION_CENTER];
++    o->name      = "zoom_created_windows_from_center";
++    o->shortDesc = "Zoom Created Windows from Center";
++    o->longDesc  = "Zooms created windows in from center instead of cursor";
++    o->type      = CompOptionTypeBool;
++    o->value.b   = FALSE;
++
+ }
+ 
+ static Bool
+@@ -286,7 +338,7 @@
+ 
+     MIN_WINDOW (w);
+ 
+-    if (mw->newState == IconicState)
++    if (mw->newState == IconicState || mw->newState == WithdrawnState)
+     {
+ 	x1 = mw->icon.x;
+ 	y1 = mw->icon.y;
+@@ -357,6 +409,11 @@
+ 	mw->ty = y1 - w->attrib.y;
+ 	mw->xScale = xScale;
+ 	mw->yScale = yScale;
++	if (mw->destroyCnt)
++	{
++	    destroyWindow (w);
++	    mw->destroyCnt--;
++	}
+ 
+ 	return 0;
+     }
+@@ -531,6 +588,21 @@
+ 	    }
+ 	}
+ 	break;
++    case DestroyNotify:
++        w = findWindowAtDisplay (d, event->xunmap.window);
++        /* mark it for zooming out */
++        if (w)
++        {
++            MIN_SCREEN (w->screen);
++            if (ms->wMask & w->type)
++            {
++                MIN_WINDOW(w);
++                mw->destroyCnt++;
++                w->destroyRefCnt++;
++                addWindowDamage(w);
++            }
++        }
++        break;
+     case UnmapNotify:
+ 	w = findWindowAtDisplay (d, event->xunmap.window);
+ 	if (w)
+@@ -564,13 +636,39 @@
+ 	    else  /* X -> Withdrawn */
+ 	    {
+ 		MIN_WINDOW (w);
+-
+-		if (mw->state == IconicState)
+-		{
+-		    (*w->screen->setWindowScale) (w, 1.0f, 1.0f);
+-		    mw->state = NormalState;
+-		}
+-	    }
++                if (ms->wMask & w->type)
++                {
++		      if (mw->state == IconicState)
++		      {
++                          (*w->screen->setWindowScale) (w, 1.0f, 1.0f);
++		      }
++                      
++                      mw->state = NormalState;
++                      mw->newState = WithdrawnState;
++                      
++                      /* let's zoom windows on hide */
++                      if (getMousePointerXY (w->screen, &mw->icon.x, &mw->icon.y) &&
++                          ms->scaleInNewWindows && (ms->wMask & w->type))
++                      {
++                          mw->icon.width = FAKE_ICON_SIZE;
++                          mw->icon.height = FAKE_ICON_SIZE;
++                          mw->icon.x -= FAKE_ICON_SIZE/2;
++                          mw->icon.y -= FAKE_ICON_SIZE/2;
++                          
++                          if (ms->scaleFromCenter)
++                          {
++                              mw->icon.x = w->attrib.x + w->attrib.width/2 - FAKE_ICON_SIZE/2;
++                              mw->icon.y = w->attrib.y + w->attrib.height/2 - FAKE_ICON_SIZE/2;
++                          }
++                          
++                          mw->adjust = TRUE;
++                          ms->moreAdjust = TRUE;
++                          mw->unmapCnt++;
++                          w->unmapRefCnt++;
++                          addWindowDamage (w);
++                      }
++                }
++            }
+ 	}
+     default:
+ 	break;
+@@ -630,6 +728,33 @@
+ 		(*w->screen->setWindowScale) (w, 1.0f, 1.0f);
+ 	    }
+ 	}
++        else if (mw->state != NormalState)
++        {
++            if (getMousePointerXY(w->screen,&mw->icon.x,&mw->icon.y) && ms->scaleInNewWindows)
++            {
++                mw->icon.width  = FAKE_ICON_SIZE;
++                mw->icon.height = FAKE_ICON_SIZE;
++                mw->icon.x -= FAKE_ICON_SIZE/2;
++                mw->icon.y -= FAKE_ICON_SIZE/2;
++                
++                if (ms->scaleFromCenter)
++                {
++                    mw->icon.x = w->attrib.x + w->attrib.width/2  - FAKE_ICON_SIZE/2;
++                    mw->icon.y = w->attrib.y + w->attrib.height/2 - FAKE_ICON_SIZE/2;
++                }
++                
++                mw->tx = mw->icon.x-w->attrib.x;
++                mw->ty = mw->icon.y-w->attrib.y;
++                mw->xScale = ((float)FAKE_ICON_SIZE) / w->attrib.width;
++                mw->yScale = ((float)FAKE_ICON_SIZE) / w->attrib.height;
++                
++                mw->state = IconicState; /* we're doing this as a hack, it may not be necessary */
++                mw->newState = NormalState;
++                mw->adjust = TRUE;
++                ms->moreAdjust = TRUE;
++                addWindowDamage (w);
++            }
++        }
+ 
+ 	mw->newState = NormalState;
+     }
+@@ -649,7 +774,7 @@
+     MIN_SCREEN (w->screen);
+     MIN_WINDOW (w);
+ 
+-    if (mw->unmapCnt)
++    if (mw->unmapCnt || mw->destroyCnt)
+ 	return FALSE;
+ 
+     UNWRAP (ms, w->screen, focusWindow);
+@@ -723,6 +848,8 @@
+ 
+     ms->speed    = MIN_SPEED_DEFAULT;
+     ms->timestep = MIN_TIMESTEP_DEFAULT;
++    ms->scaleInNewWindows = TRUE;
++    ms->scaleFromCenter   = FALSE;
+ 
+     minScreenInitOptions (ms);
+ 
+@@ -775,11 +902,40 @@
+     mw->xScaleVelocity = mw->yScaleVelocity = 1.0f;
+ 
+     mw->unmapCnt = 0;
++    mw->destroyCnt = 0;
+ 
+     mw->state = mw->newState = minGetWindowState (w);
+ 
+     w->privates[ms->windowPrivateIndex].ptr = mw;
+ 
++    /* use a 'virtual' icon of 32x32 at mpx-16,mpy-16 */
++    /* TODO consider changing this to a configurable thing somehow */
++    if (w->type & ms->wMask && ms->scaleInNewWindows && mw->state == NormalState)
++    {
++        if (getMousePointerXY (w->screen, &mw->icon.x, &mw->icon.y))
++        {
++            mw->icon.width = FAKE_ICON_SIZE;
++            mw->icon.height = FAKE_ICON_SIZE;
++            mw->icon.x -= FAKE_ICON_SIZE / 2;
++            mw->icon.y -= FAKE_ICON_SIZE / 2;
++            if (ms->scaleFromCenter)
++            {
++                mw->icon.x = w->attrib.x + w->attrib.width/2 - FAKE_ICON_SIZE/2;
++                mw->icon.y = w->attrib.y + w->attrib.height/2 - FAKE_ICON_SIZE/2;
++            }
++            
++            mw->tx = mw->icon.x - w->attrib.x;
++            mw->ty = mw->icon.y - w->attrib.y;
++            mw->xScale = ((float)FAKE_ICON_SIZE) / w->attrib.width;
++            mw->yScale = ((float)FAKE_ICON_SIZE) / w->attrib.height;
++            mw->state = IconicState; /* we're doing this as a hack, it may not be necessary */
++            mw->newState = NormalState;
++            mw->adjust=TRUE;
++            ms->moreAdjust=TRUE;
++            addWindowDamage (w);
++        }
++    }
++
+     return TRUE;
+ }
+ 
