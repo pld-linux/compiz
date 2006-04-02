@@ -2,7 +2,7 @@
 # Conditional build:
 %bcond_without	gconf		# don't build gconf plugin
 %bcond_without	gnome		# don't build gnome-window-decorator
-%bcond_with	kde		# build kde-window-decorator (currently not working)
+%bcond_without	kde		# dont' build kde-window-decorator
 #
 %define		_snap	20060331
 #
