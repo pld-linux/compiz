@@ -4,17 +4,17 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (not working)
 #
-%define		_snap	20060406
+%define		_snap	20060407
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
-Version:	0.0.8
+Version:	0.0.9
 Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	1bcf3a6968a9ed1092759bf05b167a42
+# Source0-md5:	7bed4c32c769fc5a7c3b3b31ceb0a312
 Patch0:		%{name}-minimize-scaler-mod.patch
 %if %{with gconf} || %{with gnome}
 BuildRequires:	GConf2-devel >= 2.0
@@ -43,20 +43,21 @@ BuildRequires:	QtCore-devel
 BuildRequires:	QtGui-devel
 BuildRequires:	qt4-build
 %endif
+Requires(post,preun):	GConf2
 Obsoletes:	compiz-opacity
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Compiz is an OpenGL compositing manager that use
-GLX_EXT_texture_from_pixmap for binding redirected top-level
-windows to texture objects. It has a flexible plug-in system
-and it is designed to run well on most graphics hardware.
+GLX_EXT_texture_from_pixmap for binding redirected top-level windows
+to texture objects. It has a flexible plug-in system and it is
+designed to run well on most graphics hardware.
 
 %description -l pl
 Compiz jest OpenGL-owym zarz±dc± sk³adania, u¿ywaj±cym rozszerzenia
-GLX_EXT_texture_from_pixmap w celu wi±zania przekierowanych okien
-do tekstur. Posiada elastyczny system wtyczek i jest tak
-zaprojektowany, by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
+GLX_EXT_texture_from_pixmap w celu wi±zania przekierowanych okien do
+tekstur. Posiada elastyczny system wtyczek i jest tak zaprojektowany,
+by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 
 %package devel
 Summary:	Header files for compiz
@@ -141,6 +142,12 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post
+%gconf_schema_install compiz.schemas
+
+%preun
+%gconf_schema_uninstall compiz.schemas
+
 %files
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README TODO
@@ -151,6 +158,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with gnome}
 %{_datadir}/gnome/wm-properties/*
 %endif
+%{_sysconfdir}/gconf/schemas/compiz.schemas
 
 %files devel
 %defattr(644,root,root,755)
