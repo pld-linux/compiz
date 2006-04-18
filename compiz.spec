@@ -4,7 +4,7 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (not working)
 #
-%define		_snap	20060411
+%define		_snap	20060418
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
@@ -14,7 +14,9 @@ Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	96883c019d5d01123d1ba2d277ed3a35
+# Source0-md5:	03bf9a45e7ab38576d7560cba44c2959
+Source1:	%{name}-pld.png
+# Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 Patch0:		%{name}-minimize-scaler-mod.patch
 %if %{with gconf} || %{with gnome}
 BuildRequires:	GConf2-devel >= 2.0
@@ -136,6 +138,8 @@ rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/novell.png
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 
