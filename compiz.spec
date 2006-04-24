@@ -38,7 +38,7 @@ BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gtk+2-devel >= 2:2.8.0
-BuildRequires:	libwnck-devel >= 2.0
+BuildRequires:	libwnck-devel >= 2.14.1-2
 %endif
 %if %{with kde}
 BuildRequires:	QtCore-devel
