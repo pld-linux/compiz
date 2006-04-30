@@ -25,6 +25,7 @@ BuildRequires:	OpenGL-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	glib2-devel >= 2.0
+BuildRequires:	glitz-devel
 BuildRequires:	libpng-devel
 BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libtool
@@ -34,9 +35,11 @@ BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXrandr-devel
+BuildRequires:	xorg-lib-libXres-devel
 %if %{with gnome}
 BuildRequires:	control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
+BuildRequires:	gnome-menus-devel
 BuildRequires:	gtk+2-devel >= 2:2.8.0
 BuildRequires:	libwnck-devel >= 2.14.1-2
 %endif
