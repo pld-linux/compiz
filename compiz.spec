@@ -4,7 +4,7 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (not working)
 #
-%define		_snap	20060430
+%define		_snap	20060505
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
@@ -14,14 +14,14 @@ Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	fc79625701b36903cba32d7f1cc4f63e
+# Source0-md5:	3807b7f11534f8773a19f80f1031f853
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 Patch0:		%{name}-minimize-scaler-mod.patch
 %if %{with gconf} || %{with gnome}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
-BuildRequires:	OpenGL-devel
+BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	glib2-devel >= 2.0
@@ -49,6 +49,7 @@ BuildRequires:	QtGui-devel
 BuildRequires:	qt4-build
 %endif
 Requires(post,preun):	GConf2
+Conflicts:	xorg-xserver-xgl < 0.0.20060505
 Obsoletes:	compiz-opacity
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
