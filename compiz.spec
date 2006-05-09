@@ -4,7 +4,7 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (not working)
 #
-%define		_snap	20060505
+%define		_snap	20060509
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
@@ -14,7 +14,7 @@ Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	3807b7f11534f8773a19f80f1031f853
+# Source0-md5:	dfb6a14dff879db81c171ed86283d37d
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 Patch0:		%{name}-minimize-scaler-mod.patch
@@ -26,6 +26,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	glitz-devel
+BuildRequires:	intltool
 BuildRequires:	libpng-devel
 BuildRequires:	libsvg-cairo-devel
 BuildRequires:	libtool
@@ -126,6 +127,10 @@ Dekorator okien dla KDE.
 
 %build
 autoreconf -v --install
+ln -s ../po config/po
+%{__intltoolize}
+rm config/po
+sed -i -e 's/^mkinstalldirs.*/MKINSTALLDIRS=mkdir -p/' po/Makefile.in.in
 
 %configure \
 	--disable-static \
