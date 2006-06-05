@@ -24,6 +24,7 @@ BuildRequires:	GConf2-devel >= 2.0
 BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
+BuildRequires:	fam-devel
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	glitz-devel
 BuildRequires:	intltool
@@ -147,6 +148,7 @@ sed -i -e 's/^mkinstalldirs.*/MKINSTALLDIRS=mkdir -p/' po/Makefile.in.in
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
+	desktopfilesdir=%{_datadir}/wm-properties \
 	DESTDIR=$RPM_BUILD_ROOT
 
 install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/novell.png
@@ -170,7 +172,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{_datadir}/compiz
 %if %{with gnome}
-%{_datadir}/gnome/wm-properties/*
+%{_datadir}/wm-properties/*
 %endif
 %{_sysconfdir}/gconf/schemas/compiz.schemas
 
