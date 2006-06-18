@@ -24,7 +24,6 @@ BuildRequires:	GConf2-devel >= 2.0
 BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
-BuildRequires:	fam-devel
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	glitz-devel
 BuildRequires:	intltool
