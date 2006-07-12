@@ -14,7 +14,7 @@ Release:	1.%{_snap}.1
 License:	GPL/MIT
 Group:		X11
 Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	79b7329372ce4015c7e0ec226370cec6
+# Source0-md5:	852c1c9c41ae0b593433fac025284880
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 Patch0:		%{name}-minimize-scaler-mod.patch
