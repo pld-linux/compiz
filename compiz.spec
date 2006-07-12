@@ -4,7 +4,7 @@
 %bcond_without	gnome		# don't build gnome-window-decorator
 %bcond_with	kde		# build kde-window-decorator (not working)
 #
-%define		_snap	20060608
+%define		_snap	20060712
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
@@ -154,6 +154,8 @@ install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/novell.png
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 
+%find_lang %{name}
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -163,7 +165,7 @@ rm -rf $RPM_BUILD_ROOT
 %preun
 %gconf_schema_uninstall compiz.schemas
 
-%files
+%files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS ChangeLog README TODO
 %attr(755,root,root) %{_bindir}/compiz
