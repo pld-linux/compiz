@@ -1,50 +1,58 @@
 #
 # Conditional build:
-%bcond_without	gconf		# don't build gconf plugin
-%bcond_without	gnome		# don't build gnome-window-decorator
-%bcond_with	kde		# build kde-window-decorator (not working)
-#
-%define		_snap	20060712
+%bcond_without	gconf		# gconf plugin
+%bcond_without	gtk		# gtk window decorator
+%bcond_without	gnome		# gnome settings module
+%bcond_without	metacity	# metacity theme support
+%bcond_with	kde		# kde-window-decorator (not working)
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
-Version:	0.0.13
-Release:	1.%{_snap}.1
+Version:	0.2.0
+Release:	1
 License:	GPL or MIT
-Group:		X11
-#Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
-Source0:	%{name}-%{_snap}.tar.bz2
-# Source0-md5:	852c1c9c41ae0b593433fac025284880
+Group:		X11/Applications
+Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
+# Source0-md5:	286a36ddb5d5b05534eb809eab541ec8
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
-Patch0:		%{name}-minimize-scaler-mod.patch
 URL:		http://xorg.freedesktop.org/
-%if %{with gconf} || %{with gnome}
+%if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
 BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake
+BuildRequires:	cairo-devel >= 1.0
+BuildRequires:	dbus-devel >= 0.35
 BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	glitz-devel
 BuildRequires:	intltool
 BuildRequires:	libpng-devel
-BuildRequires:	libsvg-cairo-devel
+BuildRequires:	librsvg-devel >= 2.14.0
 BuildRequires:	libtool
 BuildRequires:	pkgconfig
 BuildRequires:	startup-notification-devel >= 0.7
 BuildRequires:	xorg-lib-libSM-devel
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
+BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXres-devel
+%if %{with gtk}
+BuildRequires:	gtk+2-devel >= 2:2.8.0
+BuildRequires:	libwnck-devel >= 2.14.1-2
+BuildRequires:	pango-devel >= 1.10.0
+BuildRequires:	xorg-lib-libXrender-devel >= 0.8.4
 %if %{with gnome}
 BuildRequires:	control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-menus-devel
-BuildRequires:	gtk+2-devel >= 2:2.8.0
-BuildRequires:	libwnck-devel >= 2.14.1-2
+%endif
+%if %{with metacity}
+BuildRequires:	metacity-devel >= 2.15.21
+%endif
 %endif
 %if %{with kde}
 BuildRequires:	QtCore-devel
@@ -71,7 +79,7 @@ by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 %package devel
 Summary:	Header files for compiz
 Summary(pl):	Pliki nag³ówkowe dla compiza
-Group:		Development
+Group:		X11/Development/Libraries
 # (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
 Requires:	OpenGL-devel
 Requires:	libpng-devel
@@ -79,6 +87,7 @@ Requires:	startup-notification-devel >= 0.7
 Requires:	xorg-lib-libSM-devel
 Requires:	xorg-lib-libXcomposite-devel
 Requires:	xorg-lib-libXdamage-devel
+Requires:	xorg-lib-libXinerama-devel
 Requires:	xorg-lib-libXrandr-devel
 
 %description devel
@@ -87,34 +96,47 @@ Header files for compiz.
 %description devel -l pl
 Pliki nag³ówkowe dla compiza.
 
+%package gconf
+Summary:	GConf plugin for Compiz
+Summary(pl):	Wtyczka GConf dla Compiza
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+
+%description gconf
+GConf plugin for Compiz.
+
+%description gconf -l pl
+Wtyczka GConf dla Compiza.
+
 %package gnome-settings
-Summary:	Compiz settings for gnome control panel
-Summary(pl):	Ustawienia compiza dla panelu sterowania gnome
-Group:		X11
+Summary:	Compiz settings for GNOME control panel
+Summary(pl):	Ustawienia compiza dla panelu sterowania GNOME
+Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
 %description gnome-settings
-Compiz settings for gnome control panel.
+Compiz settings for GNOME control panel.
 
 %description gnome-settings -l pl
-Ustawienia compiza dla panelu sterowania gnome.
+Ustawienia compiza dla panelu sterowania GNOME.
 
-%package gnome-decorator
-Summary:	Window decorator for gnome
-Summary(pl):	Dekorator okien dla gnome
-Group:		X11
+%package gtk-decorator
+Summary:	Window decorator for GTK+
+Summary(pl):	Dekorator okien dla GTK+
+Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	compiz-gnome-decorator
 
-%description gnome-decorator
-Window decorator for gnome.
+%description gtk-decorator
+Window decorator for GTK+.
 
-%description gnome-decorator -l pl
-Dekorator okien dla gnome.
+%description gtk-decorator -l pl
+Dekorator okien dla GTK+.
 
 %package kde-decorator
 Summary:	Window decorator for KDE
 Summary(pl):	Dekorator okien dla KDE
-Group:		X11
+Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
 %description kde-decorator
@@ -124,24 +146,22 @@ Window decorator for KDE.
 Dekorator okien dla KDE.
 
 %prep
-%setup -q -n %{name}-%{_snap}
-# doesn't apply anymore
-#%patch0 -p0
+%setup -q
 
 %build
-autoreconf -v --install
-ln -s ../po config/po
-%{__intltoolize}
-rm config/po
-sed -i -e 's/^mkinstalldirs.*/MKINSTALLDIRS=mkdir -p/' po/Makefile.in.in
-
+%{__libtoolize}
+%{__aclocal}
+%{__autoconf}
+%{__autoheader}
+%{__automake}
 %configure \
 	--disable-static \
-	--enable-svg \
-	--enable-libsvg-cairo \
+	--enable-librsvg \
 	%{!?with_gconf:--disable-gconf} \
-	--%{?with_gnome:en}%{!?with_gnome:dis}able-gnome \
-	--%{?with_kde:en}%{!?with_kde:dis}able-kde
+	%{!?with_gnome:--disable-gnome} \
+	%{!?with_gtk:--disable-gtk} \
+	%{!?with_metacity:--disable-metacity} \
+	%{?with_kde:--enable-kde}
 
 %{__make}
 
@@ -161,37 +181,44 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post gconf
 %gconf_schema_install compiz.schemas
 
-%preun
+%preun gconf
 %gconf_schema_uninstall compiz.schemas
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
-%doc AUTHORS ChangeLog README TODO
+%doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/compiz
 %dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
+%{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{_datadir}/compiz
-%if %{with gnome}
-%{_datadir}/wm-properties/*
-%endif
-%{_sysconfdir}/gconf/schemas/compiz.schemas
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/compiz
 %{_pkgconfigdir}/compiz.pc
 
+%if %{with gconf}
+%files gconf
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/compiz/libgconf.so
+%{_sysconfdir}/gconf/schemas/compiz.schemas
+%endif
+
 %if %{with gnome}
 %files gnome-settings
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/window-manager-settings/*.so
+%{_datadir}/wm-properties/compiz.desktop
+%endif
 
-%files gnome-decorator
+%if %{with gtk}
+%files gtk-decorator
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/gnome-window-decorator
+%attr(755,root,root) %{_bindir}/gtk-window-decorator
 %endif
 
 %if %{with kde}
