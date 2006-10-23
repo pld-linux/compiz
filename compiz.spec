@@ -9,12 +9,12 @@
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
-Version:	0.2.0
+Version:	0.3.2
 Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
-# Source0-md5:	286a36ddb5d5b05534eb809eab541ec8
+# Source0-md5:	269fd407832dd5ff4728e0c4d445eb9b
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 URL:		http://xorg.freedesktop.org/
@@ -187,6 +187,12 @@ rm -rf $RPM_BUILD_ROOT
 %preun gconf
 %gconf_schema_uninstall compiz.schemas
 
+%post gtk-decorator
+%gconf_schema_install gwd.schemas
+
+%preun gtk-decorator
+%gconf_schema_uninstall gwd.schemas
+
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
@@ -219,6 +225,7 @@ rm -rf $RPM_BUILD_ROOT
 %files gtk-decorator
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/gtk-window-decorator
+%{_sysconfdir}/gconf/schemas/gwd.schemas
 %endif
 
 %if %{with kde}
