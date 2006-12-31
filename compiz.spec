@@ -4,17 +4,17 @@
 %bcond_without	gtk		# gtk window decorator
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
-%bcond_with	kde		# kde-window-decorator (not working)
+%bcond_without	kde		# kde-window-decorator
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
-Version:	0.3.4
+Version:	0.3.6
 Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
-# Source0-md5:	101fd4a8fdb92caea6c10f6957273945
+# Source0-md5:	260b03fc9ae62ff1ad4e8c5e92d56180
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
 URL:		http://xorg.freedesktop.org/
@@ -27,6 +27,8 @@ BuildRequires:	automake
 BuildRequires:	cairo-devel >= 1.0
 BuildRequires:	dbus-devel >= 0.35
 BuildRequires:	glib2-devel >= 2.0
+# <sys/inotify.h>
+BuildRequires:	glibc-devel >= 6:2.4
 BuildRequires:	glitz-devel
 BuildRequires:	intltool
 BuildRequires:	libpng-devel
@@ -55,9 +57,9 @@ BuildRequires:	metacity-devel >= 2.15.21
 %endif
 %endif
 %if %{with kde}
-BuildRequires:	QtCore-devel
-BuildRequires:	QtGui-devel
-BuildRequires:	qt4-build
+BuildRequires:	dbus-qt-devel
+BuildRequires:	kdelibs-devel
+BuildRequires:	qt-devel >= 3.0
 %endif
 Requires(post,preun):	GConf2
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
@@ -80,6 +82,7 @@ by dobrze dzia³aæ na wiêkszo¶ci kart graficznych.
 Summary:	Header files for compiz
 Summary(pl):	Pliki nag³ówkowe dla compiza
 Group:		X11/Development/Libraries
+Requires:	%{name} = %{version}-%{release}
 # (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
 Requires:	OpenGL-devel
 Requires:	libpng-devel
@@ -124,6 +127,9 @@ Ustawienia compiza dla panelu sterowania GNOME.
 Summary:	Window decorator for GTK+
 Summary(pl):	Dekorator okien dla GTK+
 Group:		X11/Applications
+%if %{with gconf}
+Requires(post,postun):	GConf2
+%endif
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	compiz-gnome-decorator
 
@@ -160,8 +166,8 @@ Dekorator okien dla KDE.
 	%{!?with_gconf:--disable-gconf} \
 	%{!?with_gnome:--disable-gnome} \
 	%{!?with_gtk:--disable-gtk} \
-	%{!?with_metacity:--disable-metacity} \
-	%{?with_kde:--enable-kde}
+	%{!?with_kde:--disable-kde} \
+	%{!?with_metacity:--disable-metacity}
 
 %{__make}
 
@@ -172,7 +178,7 @@ rm -rf $RPM_BUILD_ROOT
 	desktopfilesdir=%{_datadir}/wm-properties \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/novell.png
+install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/pld.png
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 
@@ -181,22 +187,28 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %post gconf
 %gconf_schema_install compiz.schemas
 
 %preun gconf
 %gconf_schema_uninstall compiz.schemas
 
+%if %{with gconf}
 %post gtk-decorator
 %gconf_schema_install gwd.schemas
 
 %preun gtk-decorator
 %gconf_schema_uninstall gwd.schemas
+%endif
 
 %files -f %{name}.lang
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/compiz
+%attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
 %dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
@@ -204,8 +216,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdecoration.so
+%{_libdir}/libdecoration.la
 %{_includedir}/compiz
 %{_pkgconfigdir}/compiz.pc
+%{_pkgconfigdir}/libdecoration.pc
 
 %if %{with gconf}
 %files gconf
@@ -225,7 +240,9 @@ rm -rf $RPM_BUILD_ROOT
 %files gtk-decorator
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/gtk-window-decorator
+%if %{with gconf}
 %{_sysconfdir}/gconf/schemas/gwd.schemas
+%endif
 %endif
 
 %if %{with kde}
