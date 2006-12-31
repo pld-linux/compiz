@@ -10,13 +10,14 @@ Summary:	OpenGL window and compositing manager
 Summary(pl):	OpenGL-owy zarz±dca okien i sk³adania
 Name:		compiz
 Version:	0.3.6
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
 # Source0-md5:	260b03fc9ae62ff1ad4e8c5e92d56180
 Source1:	%{name}-pld.png
 # Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
+Patch0:		%{name}-DESTDIR.patch
 URL:		http://xorg.freedesktop.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
@@ -59,6 +60,7 @@ BuildRequires:	metacity-devel >= 2.15.21
 %if %{with kde}
 BuildRequires:	dbus-qt-devel
 BuildRequires:	kdelibs-devel
+BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 3.0
 %endif
 Requires(post,preun):	GConf2
@@ -153,6 +155,7 @@ Dekorator okien dla KDE.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -160,6 +163,7 @@ Dekorator okien dla KDE.
 %{__autoconf}
 %{__autoheader}
 %{__automake}
+QTLIB=%{_libdir}; export QTLIB
 %configure \
 	--disable-static \
 	--enable-librsvg \
