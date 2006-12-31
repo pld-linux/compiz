@@ -1,0 +1,51 @@
+diff -urN compiz-0.3.6.org/gtk/gnome/Makefile.am compiz-0.3.6/gtk/gnome/Makefile.am
+--- compiz-0.3.6.org/gtk/gnome/Makefile.am	2006-12-15 22:27:42.000000000 +0100
++++ compiz-0.3.6/gtk/gnome/Makefile.am	2006-12-31 23:44:57.180927250 +0100
+@@ -1,4 +1,4 @@
+-moduledir = $(DESTDIR)$(windowsettingslibdir)/window-manager-settings
++moduledir = $(windowsettingslibdir)/window-manager-settings
+ 
+ if USE_GNOME
+ libcompiz_la_LDFLAGS = -export-dynamic -avoid-version -rpath $(moduledir)
+@@ -8,32 +8,32 @@
+ 	compiz-window-manager.h
+ libcompiz_module     = libcompiz.la
+ 
+-desktopfilesdir	      = $(DESTDIR)$(windowsettingsdatadir)/gnome/wm-properties
++desktopfilesdir	      = $(windowsettingsdatadir)/gnome/wm-properties
+ desktopfiles_in_files = compiz.desktop.in
+ desktopfiles_files    = $(desktopfiles_in_files:.desktop.in=.desktop)
+ noinst_DATA           = $(desktopfiles_files)
+ 
+ install-exec-local:
+-	if mkdir -p $(moduledir) && test -w $(moduledir); then ( \
++	if mkdir -p $(DESTDIR)$(moduledir) && test -w $(DESTDIR)$(moduledir); then ( \
+ 		$(LIBTOOL) --mode=install $(INSTALL) $(libcompiz_module) \
+-		$(moduledir) \
++		$(DESTDIR)$(moduledir) \
+ 		); \
+ 	fi
+ 
+ install-data-local:
+-	if mkdir -p $(desktopfilesdir) && test -w $(desktopfilesdir); then ( \
++	if mkdir -p $(DESTDIR)$(desktopfilesdir) && test -w $(DESTDIR)$(desktopfilesdir); then ( \
+ 		$(INSTALL) -m 644 $(desktopfiles_files) \
+-		$(desktopfilesdir) \
++		$(DESTDIR)$(desktopfilesdir) \
+ 		); \
+ 	fi
+ 
+ uninstall-local:
+-	if test -w $(moduledir); then ( \
+-		rm -f $(moduledir)/libcompiz.* \
++	if test -w $(DESTDIR)$(moduledir); then ( \
++		rm -f $(DESTDIR)$(moduledir)/libcompiz.* \
+ 		); \
+ 	fi
+-	if test -w $(desktopfilesdir); then ( \
+-		rm -f $(desktopfilesdir)/compiz.desktop \
++	if test -w $(DESTDIR)$(desktopfilesdir); then ( \
++		rm -f $(DESTDIR)$(desktopfilesdir)/compiz.desktop \
+ 		); \
+ 	fi
+ 
