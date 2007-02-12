@@ -7,7 +7,7 @@
 %bcond_without	kde		# kde-window-decorator
 #
 Summary:	OpenGL window and compositing manager
-Summary(pl.UTF-8):   OpenGL-owy zarządca okien i składania
+Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 Version:	0.3.6
 Release:	2
@@ -82,7 +82,7 @@ by dobrze działać na większości kart graficznych.
 
 %package devel
 Summary:	Header files for compiz
-Summary(pl.UTF-8):   Pliki nagłówkowe dla compiza
+Summary(pl.UTF-8):	Pliki nagłówkowe dla compiza
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 # (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
@@ -103,7 +103,7 @@ Pliki nagłówkowe dla compiza.
 
 %package gconf
 Summary:	GConf plugin for Compiz
-Summary(pl.UTF-8):   Wtyczka GConf dla Compiza
+Summary(pl.UTF-8):	Wtyczka GConf dla Compiza
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
@@ -115,7 +115,7 @@ Wtyczka GConf dla Compiza.
 
 %package gnome-settings
 Summary:	Compiz settings for GNOME control panel
-Summary(pl.UTF-8):   Ustawienia compiza dla panelu sterowania GNOME
+Summary(pl.UTF-8):	Ustawienia compiza dla panelu sterowania GNOME
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
@@ -127,7 +127,7 @@ Ustawienia compiza dla panelu sterowania GNOME.
 
 %package gtk-decorator
 Summary:	Window decorator for GTK+
-Summary(pl.UTF-8):   Dekorator okien dla GTK+
+Summary(pl.UTF-8):	Dekorator okien dla GTK+
 Group:		X11/Applications
 %if %{with gconf}
 Requires(post,postun):	GConf2
@@ -143,7 +143,7 @@ Dekorator okien dla GTK+.
 
 %package kde-decorator
 Summary:	Window decorator for KDE
-Summary(pl.UTF-8):   Dekorator okien dla KDE
+Summary(pl.UTF-8):	Dekorator okien dla KDE
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
