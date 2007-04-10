@@ -61,7 +61,7 @@ BuildRequires:	metacity-devel >= 2.15.21
 BuildRequires:	dbus-qt-devel
 BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
-BuildRequires:	qt-devel >= 3.0
+BuildRequires:	qt-devel >= 1:3.0
 %endif
 Requires(post,preun):	GConf2
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
