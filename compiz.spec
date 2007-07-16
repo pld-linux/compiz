@@ -63,7 +63,6 @@ BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
 %endif
-Requires(post,preun):	GConf2
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 Obsoletes:	compiz-opacity
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -105,6 +104,7 @@ Pliki nagłówkowe dla compiza.
 Summary:	GConf plugin for Compiz
 Summary(pl.UTF-8):	Wtyczka GConf dla Compiza
 Group:		X11/Applications
+Requires(post,preun):	GConf2
 Requires:	%{name} = %{version}-%{release}
 
 %description gconf
@@ -130,7 +130,7 @@ Summary:	Window decorator for GTK+
 Summary(pl.UTF-8):	Dekorator okien dla GTK+
 Group:		X11/Applications
 %if %{with gconf}
-Requires(post,postun):	GConf2
+Requires(post,preun):	GConf2
 %endif
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	compiz-gnome-decorator
