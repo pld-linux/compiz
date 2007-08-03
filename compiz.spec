@@ -9,14 +9,12 @@
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
-Version:	0.5.0
+Version:	0.5.2
 Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
-Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.bz2
-# Source0-md5:	7a35a9f52155b945aa195f826d3d607a
-Source1:	%{name}-pld.png
-# Source1-md5:	3050dc90fd4e5e990bb5baeb82bd3c8a
+Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
+# Source0-md5:	7a38a921359573fb57d53e057f481f08
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://xorg.freedesktop.org/
 %if %{with gconf} || %{with gtk}
@@ -68,16 +66,15 @@ Obsoletes:	compiz-opacity
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Compiz is an OpenGL compositing manager that use
-GLX_EXT_texture_from_pixmap for binding redirected top-level windows
-to texture objects. It has a flexible plug-in system and it is
-designed to run well on most graphics hardware.
+Compiz is a compositing window manager that uses 3D graphics
+acceleration via OpenGL. It provides various new graphical effects
+and features on any desktop environment, including Gnome and KDE.
 
 %description -l pl.UTF-8
-Compiz jest OpenGL-owym zarządcą składania, używającym rozszerzenia
-GLX_EXT_texture_from_pixmap w celu wiązania przekierowanych okien do
-tekstur. Posiada elastyczny system wtyczek i jest tak zaprojektowany,
-by dobrze działać na większości kart graficznych.
+Compiz jest menedżerem okien obsługującym składanie, który używa
+akceleracji grafiki 3D przez OpenGL-a. Umożliwia on uzyskanie nowych
+efektów graficznych i możliwości w dowolnym środowisku, nie
+wyłączając Gnome i KDE.
 
 %package devel
 Summary:	Header files for compiz
@@ -155,7 +152,7 @@ Dekorator okien dla KDE.
 
 %prep
 %setup -q
-%patch0 -p1
+#%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -182,8 +179,6 @@ rm -rf $RPM_BUILD_ROOT
 	desktopfilesdir=%{_datadir}/wm-properties \
 	DESTDIR=$RPM_BUILD_ROOT
 
-install %{SOURCE1} $RPM_BUILD_ROOT%{_datadir}/compiz/pld.png
-
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 
 %find_lang %{name}
@@ -194,18 +189,20 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
+%if %{with gconf}
 %post gconf
-%gconf_schema_install compiz.schemas
+%gconf_schema_install
 
 %preun gconf
-%gconf_schema_uninstall compiz.schemas
+%gconf_schema_uninstall
 
-%if %{with gconf}
+%if %{with gtk}
 %post gtk-decorator
 %gconf_schema_install gwd.schemas
 
 %preun gtk-decorator
 %gconf_schema_uninstall gwd.schemas
+%endif
 %endif
 
 %files -f %{name}.lang
@@ -217,27 +214,27 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{_datadir}/compiz
+%{?with_gconf:%exclude %{_datadir}/compiz/gconf.xml}
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdecoration.so
 %{_libdir}/libdecoration.la
 %{_includedir}/compiz
-%{_pkgconfigdir}/compiz.pc
-%{_pkgconfigdir}/libdecoration.pc
+%{_pkgconfigdir}/*.pc
 
 %if %{with gconf}
 %files gconf
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/compiz/libgconf.so
-%{_sysconfdir}/gconf/schemas/compiz.schemas
+%{_sysconfdir}/gconf/schemas/compiz-*.schemas
+%{_datadir}/compiz/gconf.xml
 %endif
 
 %if %{with gnome}
 %files gnome-settings
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/window-manager-settings/*.so
-%{_datadir}/wm-properties/compiz.desktop
 %endif
 
 %if %{with gtk}
