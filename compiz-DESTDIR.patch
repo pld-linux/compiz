@@ -1,13 +1,12 @@
-diff -urN compiz-0.3.6.org/gtk/gnome/Makefile.am compiz-0.3.6/gtk/gnome/Makefile.am
---- compiz-0.3.6.org/gtk/gnome/Makefile.am	2006-12-15 22:27:42.000000000 +0100
-+++ compiz-0.3.6/gtk/gnome/Makefile.am	2006-12-31 23:44:57.180927250 +0100
+--- compiz-0.5.2/gtk/gnome/Makefile.am.orig	2007-05-11 19:19:31.000000000 +0200
++++ compiz-0.5.2/gtk/gnome/Makefile.am	2007-08-04 21:21:03.842196678 +0200
 @@ -1,4 +1,4 @@
 -moduledir = $(DESTDIR)$(windowsettingslibdir)/window-manager-settings
 +moduledir = $(windowsettingslibdir)/window-manager-settings
  
  if USE_GNOME
  libcompiz_la_LDFLAGS = -export-dynamic -avoid-version -rpath $(moduledir)
-@@ -8,32 +8,32 @@
+@@ -8,7 +8,7 @@
  	compiz-window-manager.h
  libcompiz_module     = libcompiz.la
  
@@ -15,7 +14,18 @@ diff -urN compiz-0.3.6.org/gtk/gnome/Makefile.am compiz-0.3.6/gtk/gnome/Makefile
 +desktopfilesdir	      = $(windowsettingsdatadir)/gnome/wm-properties
  desktopfiles_in_files = compiz.desktop.in
  desktopfiles_files    = $(desktopfiles_in_files:.desktop.in=.desktop)
- noinst_DATA           = $(desktopfiles_files)
+ 
+@@ -16,7 +16,7 @@
+ 
+ if USE_GNOME_KEYBINDINGS
+ 
+-xmldir       = $(DESTDIR)$(keybindingsdir)
++xmldir       = $(keybindingsdir)
+ xml_in_files = 50-compiz-desktop-key.xml.in 50-compiz-key.xml.in
+ xml_files    = $(xml_in_files:.xml.in=.xml)
+ 
+@@ -25,38 +25,38 @@
+ endif
  
  install-exec-local:
 -	if mkdir -p $(moduledir) && test -w $(moduledir); then ( \
@@ -34,6 +44,15 @@ diff -urN compiz-0.3.6.org/gtk/gnome/Makefile.am compiz-0.3.6/gtk/gnome/Makefile
 +		$(DESTDIR)$(desktopfilesdir) \
  		); \
  	fi
+ if USE_GNOME_KEYBINDINGS
+-	if mkdir -p $(xmldir) && test -w $(xmldir); then ( \
++	if mkdir -p $(DESTDIR)$(xmldir) && test -w $(DESTDIR)$(xmldir); then ( \
+ 		$(INSTALL) -m 644 $(xml_files) \
+-		$(xmldir) \
++		$(DESTDIR)$(xmldir) \
+ 		); \
+ 	fi
+ endif
  
  uninstall-local:
 -	if test -w $(moduledir); then ( \
@@ -48,4 +67,11 @@ diff -urN compiz-0.3.6.org/gtk/gnome/Makefile.am compiz-0.3.6/gtk/gnome/Makefile
 +		rm -f $(DESTDIR)$(desktopfilesdir)/compiz.desktop \
  		); \
  	fi
- 
+ if USE_GNOME_KEYBINDINGS
+-	if test -w $(xmldir); then ( \
+-		rm -f $(xmldir)/50-compiz*key.xml \
++	if test -w $(DESTDIR)$(xmldir); then ( \
++		rm -f $(DESTDIR)$(xmldir)/50-compiz*key.xml \
+ 		); \
+ 	fi
+ endif
