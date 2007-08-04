@@ -152,7 +152,7 @@ Dekorator okien dla KDE.
 
 %prep
 %setup -q
-#%patch0 -p1
+%patch0 -p1
 
 %build
 %{__libtoolize}
@@ -189,20 +189,18 @@ rm -rf $RPM_BUILD_ROOT
 %post	-p /sbin/ldconfig
 %postun	-p /sbin/ldconfig
 
-%if %{with gconf}
 %post gconf
 %gconf_schema_install
 
 %preun gconf
 %gconf_schema_uninstall
 
-%if %{with gtk}
+%if %{with gconf}
 %post gtk-decorator
 %gconf_schema_install gwd.schemas
 
 %preun gtk-decorator
 %gconf_schema_uninstall gwd.schemas
-%endif
 %endif
 
 %files -f %{name}.lang
@@ -221,7 +219,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libdecoration.so
 %{_libdir}/libdecoration.la
 %{_includedir}/compiz
-%{_pkgconfigdir}/*.pc
+%{_pkgconfigdir}/compiz.pc
+%{_pkgconfigdir}/libdecoration.pc
+# what is the purpose of these files? development or runtime?
+%{_pkgconfigdir}/compiz-cube.pc
+%{_pkgconfigdir}/compiz-scale.pc
 
 %if %{with gconf}
 %files gconf
@@ -229,6 +231,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/libgconf.so
 %{_sysconfdir}/gconf/schemas/compiz-*.schemas
 %{_datadir}/compiz/gconf.xml
+# what for?
+%{_pkgconfigdir}/compiz-gconf.pc
 %endif
 
 %if %{with gnome}
