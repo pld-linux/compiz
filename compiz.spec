@@ -10,7 +10,7 @@ Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 Version:	0.5.2
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -77,11 +77,22 @@ akceleracji grafiki 3D przez OpenGL-a. Umożliwia on uzyskanie nowych
 efektów graficznych i możliwości w dowolnym środowisku, nie
 wyłączając Gnome i KDE.
 
+%package libs
+Summary:	Compiz libraries
+Summary(pl.UTF-8):	Biblioteki compiza
+Group:		X11/Applications
+
+%description libs
+Compiz libraries.
+
+%description libs -l pl.UTF-8
+Biblioteki Compiza.
+
 %package devel
 Summary:	Header files for compiz
 Summary(pl.UTF-8):	Pliki nagłówkowe dla compiza
 Group:		X11/Development/Libraries
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name}-libs = %{version}-%{release}
 # (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
 Requires:	OpenGL-devel
 Requires:	libpng-devel
@@ -210,12 +221,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/compiz
-%attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
 %dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{_datadir}/compiz
 %{?with_gconf:%exclude %{_datadir}/compiz/gconf.xml}
+
+%files libs
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
