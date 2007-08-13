@@ -63,6 +63,7 @@ BuildRequires:	qt-devel >= 1:3.0
 %endif
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 Obsoletes:	compiz-opacity
+Obsoletes:	beryl-core
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -90,6 +91,7 @@ Requires:	xorg-lib-libXcomposite-devel
 Requires:	xorg-lib-libXdamage-devel
 Requires:	xorg-lib-libXinerama-devel
 Requires:	xorg-lib-libXrandr-devel
+Obsoletes:	beryl-core-devel
 
 %description devel
 Header files for compiz.
@@ -103,6 +105,7 @@ Summary(pl.UTF-8):	Wtyczka GConf dla Compiza
 Group:		X11/Applications
 Requires(post,preun):	GConf2
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	beryl-core-gconf
 
 %description gconf
 GConf plugin for Compiz.
