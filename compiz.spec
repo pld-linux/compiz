@@ -169,6 +169,7 @@ Dekorator okien dla KDE.
 %patch0 -p1
 
 %build
+%{__intltoolize}
 %{__libtoolize}
 %{__aclocal}
 %{__autoconf}
