@@ -10,7 +10,7 @@ Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 Version:	0.5.2
-Release:	2
+Release:	3
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -222,7 +222,6 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/compiz
-%dir %{_libdir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{_datadir}/compiz
@@ -231,6 +230,7 @@ rm -rf $RPM_BUILD_ROOT
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
+%dir %{_libdir}/compiz
 
 %files devel
 %defattr(644,root,root,755)
