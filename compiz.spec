@@ -201,8 +201,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post	-p /sbin/ldconfig
-%postun	-p /sbin/ldconfig
+%post	libs -p /sbin/ldconfig
+%postun	libs -p /sbin/ldconfig
 
 %post gconf
 %gconf_schema_install
