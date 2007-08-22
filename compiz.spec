@@ -28,8 +28,8 @@ BuildRequires:	dbus-devel >= 0.35
 BuildRequires:	glib2-devel >= 2.0
 # <sys/inotify.h>
 BuildRequires:	glibc-devel >= 6:2.4
-BuildRequires:	intltool
-BuildRequires:	libfuse-devel
+BuildRequires:	intltool >= 0.23
+BuildRequires:	libfuse-devel >= 2.2
 BuildRequires:	libpng-devel
 BuildRequires:	librsvg-devel >= 1:2.14.0
 BuildRequires:	libtool
