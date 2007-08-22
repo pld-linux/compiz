@@ -139,6 +139,18 @@ GConf plugin for Compiz (GConf control backend).
 %description gconf -l pl.UTF-8
 Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
 
+%package kconfig
+Summary:	Kconfig plugin for Compiz
+Summary(pl.UTF-8):	Wtyczka Kconfig dla Compiza
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+
+%description kconfig
+Kconfig plugin for Compiz (Kconfig control backend).
+
+%description kconfig -l pl.UTF-8
+Wtyczka Kconfig dla Compiza (backend sterujący oparty na Kconfigu).
+
 %package gnome-settings
 Summary:	Compiz settings for GNOME control panel
 Summary(pl.UTF-8):	Ustawienia compiza dla panelu sterowania GNOME
@@ -210,6 +222,9 @@ rm -rf $RPM_BUILD_ROOT
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
+%if %{with gnome}
+rm -f $RPM_BUILD_ROOT%{_libdir}/window-manager-settings/*.la
+%endif
 
 %find_lang %{name}
 
@@ -240,8 +255,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %exclude %{_libdir}/compiz/libfs.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
+%{?with_kde:%exclude %{_libdir}/compiz/libkconfig.so}
 %{_datadir}/compiz
-%{?with_gconf:%exclude %{_datadir}/compiz/gconf.xml}
+%exclude %{_datadir}/compiz/fs.xml
+%exclude %{_datadir}/compiz/gconf.xml
+%exclude %{_datadir}/compiz/kconfig.xml
 
 %files libs
 %defattr(644,root,root,755)
@@ -262,6 +280,7 @@ rm -rf $RPM_BUILD_ROOT
 %files fuse
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/compiz/libfs.so
+%{_datadir}/compiz/fs.xml
 
 %if %{with gconf}
 %files gconf
@@ -273,10 +292,22 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
 
+%if %{with kde}
+%files kconfig
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/compiz/libkconfig.so
+%{_datadir}/compiz/kconfig.xml
+%{_datadir}/config.kcfg/compiz-*.kcfg
+%{_datadir}/config/compizrc
+# what for?
+%{_pkgconfigdir}/compiz-kconfig.pc
+%endif
+
 %if %{with gnome}
 %files gnome-settings
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
+%{_datadir}/wm-properties/compiz.desktop
 %endif
 
 %if %{with gtk}
