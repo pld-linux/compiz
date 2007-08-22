@@ -9,12 +9,12 @@
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
-Version:	0.5.2
-Release:	3
+Version:	0.5.4
+Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
-# Source0-md5:	7a38a921359573fb57d53e057f481f08
+# Source0-md5:	04f88b85c15e02b4bd11cb9c2706707f
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://xorg.freedesktop.org/
 %if %{with gconf} || %{with gtk}
@@ -30,9 +30,11 @@ BuildRequires:	glib2-devel >= 2.0
 BuildRequires:	glibc-devel >= 6:2.4
 BuildRequires:	glitz-devel
 BuildRequires:	intltool
+BuildRequires:	libfuse-devel
 BuildRequires:	libpng-devel
-BuildRequires:	librsvg-devel >= 2.14.0
+BuildRequires:	librsvg-devel >= 1:2.14.0
 BuildRequires:	libtool
+BuildRequires:	libxcb-devel
 BuildRequires:	pkgconfig
 BuildRequires:	startup-notification-devel >= 0.7
 BuildRequires:	xorg-lib-libSM-devel
@@ -43,16 +45,16 @@ BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXres-devel
 %if %{with gtk}
 BuildRequires:	gtk+2-devel >= 2:2.8.0
-BuildRequires:	libwnck-devel >= 2.14.1-2
+BuildRequires:	libwnck-devel >= 2.18.1
 BuildRequires:	pango-devel >= 1.10.0
-BuildRequires:	xorg-lib-libXrender-devel >= 0.8.4
+BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
 %if %{with gnome}
 BuildRequires:	control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-menus-devel
 %endif
 %if %{with metacity}
-BuildRequires:	metacity-devel >= 2.15.21
+BuildRequires:	metacity-devel >= 2.17.0
 %endif
 %endif
 %if %{with kde}
@@ -61,9 +63,10 @@ BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
 %endif
-Conflicts:	xorg-xserver-xgl < 0.0.20060505
-Obsoletes:	compiz-opacity
+Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	beryl-core
+Obsoletes:	compiz-opacity
+Conflicts:	xorg-xserver-xgl < 0.0.20060505
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -81,6 +84,7 @@ wyłączając Gnome i KDE.
 Summary:	Compiz libraries
 Summary(pl.UTF-8):	Biblioteki compiza
 Group:		X11/Applications
+Conflicts:	compiz < 0.5.2-2
 
 %description libs
 Compiz libraries.
@@ -110,6 +114,18 @@ Header files for compiz.
 %description devel -l pl.UTF-8
 Pliki nagłówkowe dla compiza.
 
+%package fuse
+Summary:	FUSE plugin for Compiz
+Summary(pl.UTF-8):	Wtyczka FUSE dla Compiza
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+
+%description fuse
+FUSE plugin for Compiz (userspace file system).
+
+%description fuse -l pl.UTF-8
+Wtyczka FUSE dla Compiza (system plików w przestrzeni użytkownika).
+
 %package gconf
 Summary:	GConf plugin for Compiz
 Summary(pl.UTF-8):	Wtyczka GConf dla Compiza
@@ -119,10 +135,10 @@ Requires:	%{name} = %{version}-%{release}
 Obsoletes:	beryl-core-gconf
 
 %description gconf
-GConf plugin for Compiz.
+GConf plugin for Compiz (GConf control backend).
 
 %description gconf -l pl.UTF-8
-Wtyczka GConf dla Compiza.
+Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
 
 %package gnome-settings
 Summary:	Compiz settings for GNOME control panel
@@ -223,6 +239,7 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS COPYING COPYING.MIT ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
+%exclude %{_libdir}/compiz/libfs.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{_datadir}/compiz
 %{?with_gconf:%exclude %{_datadir}/compiz/gconf.xml}
@@ -243,6 +260,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/compiz-cube.pc
 %{_pkgconfigdir}/compiz-scale.pc
 
+%files fuse
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/compiz/libfs.so
+
 %if %{with gconf}
 %files gconf
 %defattr(644,root,root,755)
@@ -256,7 +277,7 @@ rm -rf $RPM_BUILD_ROOT
 %if %{with gnome}
 %files gnome-settings
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/window-manager-settings/*.so
+%attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
 %endif
 
 %if %{with gtk}
