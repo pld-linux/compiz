@@ -289,7 +289,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/libgconf.so
 %{_sysconfdir}/gconf/schemas/compiz-*.schemas
 %{_datadir}/compiz/gconf.xml
-# checked by compiz-fusion-plugins-main (with non-default --enable-schemas only)
+# checked by compiz-fusion-plugins-* (with non-default --enable-schemas only)
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
 
