@@ -273,8 +273,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/compiz
 %{_pkgconfigdir}/compiz.pc
 %{_pkgconfigdir}/libdecoration.pc
-# what is the purpose of these files? development or runtime?
+# checked by compiz-fusion-plugins-extra
 %{_pkgconfigdir}/compiz-cube.pc
+# checked by compiz-fusion-plugins-main
 %{_pkgconfigdir}/compiz-scale.pc
 
 %files fuse
@@ -288,7 +289,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/compiz/libgconf.so
 %{_sysconfdir}/gconf/schemas/compiz-*.schemas
 %{_datadir}/compiz/gconf.xml
-# what for?
+# checked by compiz-fusion-plugins-main (with non-default --enable-schemas only)
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
 
