@@ -10,7 +10,7 @@ Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 Version:	0.5.4
-Release:	3
+Release:	4
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -172,6 +172,7 @@ Requires(post,preun):	GConf2
 %endif
 Requires:	%{name} = %{version}-%{release}
 Obsoletes:	compiz-gnome-decorator
+Obsoletes:	heliodor
 
 %description gtk-decorator
 Window decorator for GTK+.
@@ -184,6 +185,7 @@ Summary:	Window decorator for KDE
 Summary(pl.UTF-8):	Dekorator okien dla KDE
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	aquamarine
 
 %description kde-decorator
 Window decorator for KDE.
