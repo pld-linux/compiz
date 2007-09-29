@@ -193,6 +193,8 @@ Window decorator for KDE.
 %description kde-decorator -l pl.UTF-8
 Dekorator okien dla KDE.
 
+%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify kconfig minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
+
 %prep
 %setup -q
 %patch0 -p1
@@ -237,10 +239,14 @@ rm -rf $RPM_BUILD_ROOT
 %postun	libs -p /sbin/ldconfig
 
 %post gconf
-%gconf_schema_install
+for p in %{plugins}; do
+	%gconf_schema_install compiz-$p.schemas
+done
 
 %preun gconf
-%gconf_schema_uninstall
+for p in %{plugins}; do
+	%gconf_schema_uninstall compiz-$p.schemas
+done
 
 %if %{with gconf}
 %post gtk-decorator
@@ -259,6 +265,10 @@ rm -rf $RPM_BUILD_ROOT
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %{?with_kde:%exclude %{_libdir}/compiz/libkconfig.so}
 %{_datadir}/compiz
+%if %{with gnome}
+%{_datadir}/gnome-control-center/keybindings/50-compiz-desktop-key.xml
+%{_datadir}/gnome-control-center/keybindings/50-compiz-key.xml
+%endif
 %exclude %{_datadir}/compiz/fs.xml
 %exclude %{_datadir}/compiz/gconf.xml
 %exclude %{_datadir}/compiz/kconfig.xml
@@ -306,7 +316,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/compiz-kconfig.pc
 %endif
 
-%if %{with gnome}
+%if %{with gnome} && %{with gtk}
 %files gnome-settings
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
