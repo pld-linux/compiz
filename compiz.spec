@@ -193,6 +193,7 @@ Window decorator for KDE.
 %description kde-decorator -l pl.UTF-8
 Dekorator okien dla KDE.
 
+# for gconf subpackage
 %define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify kconfig minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
 %prep
