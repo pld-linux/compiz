@@ -9,12 +9,12 @@
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
-Version:	0.5.4
-Release:	4
+Version:	0.6.2
+Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
-# Source0-md5:	04f88b85c15e02b4bd11cb9c2706707f
+# Source0-md5:	7e6edfdbf0dc46b135313440edae7a53
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://xorg.freedesktop.org/
 %if %{with gconf} || %{with gtk}
@@ -34,6 +34,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	librsvg-devel >= 1:2.14.0
 BuildRequires:	libtool
 BuildRequires:	libxcb-devel
+BuildRequires:	libxslt-devel
 BuildRequires:	pkgconfig
 BuildRequires:	startup-notification-devel >= 0.7
 BuildRequires:	xorg-lib-libSM-devel
@@ -138,18 +139,6 @@ GConf plugin for Compiz (GConf control backend).
 
 %description gconf -l pl.UTF-8
 Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
-
-%package kconfig
-Summary:	Kconfig plugin for Compiz
-Summary(pl.UTF-8):	Wtyczka Kconfig dla Compiza
-Group:		X11/Applications
-Requires:	%{name} = %{version}-%{release}
-
-%description kconfig
-Kconfig plugin for Compiz (Kconfig control backend).
-
-%description kconfig -l pl.UTF-8
-Wtyczka Kconfig dla Compiza (backend sterujący oparty na Kconfigu).
 
 %package gnome-settings
 Summary:	Compiz settings for GNOME control panel
@@ -264,15 +253,9 @@ done
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %exclude %{_libdir}/compiz/libfs.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
-%{?with_kde:%exclude %{_libdir}/compiz/libkconfig.so}
 %{_datadir}/compiz
-%if %{with gnome}
-%{_datadir}/gnome-control-center/keybindings/50-compiz-desktop-key.xml
-%{_datadir}/gnome-control-center/keybindings/50-compiz-key.xml
-%endif
 %exclude %{_datadir}/compiz/fs.xml
 %exclude %{_datadir}/compiz/gconf.xml
-%exclude %{_datadir}/compiz/kconfig.xml
 
 %files libs
 %defattr(644,root,root,755)
@@ -304,17 +287,6 @@ done
 %{_datadir}/compiz/gconf.xml
 # checked by compiz-fusion-plugins-* (with non-default --enable-schemas only)
 %{_pkgconfigdir}/compiz-gconf.pc
-%endif
-
-%if %{with kde}
-%files kconfig
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/compiz/libkconfig.so
-%{_datadir}/compiz/kconfig.xml
-%{_datadir}/config.kcfg/compiz-*.kcfg
-%{_datadir}/config/compizrc
-# what for?
-%{_pkgconfigdir}/compiz-kconfig.pc
 %endif
 
 %if %{with gnome} && %{with gtk}
