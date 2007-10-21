@@ -22,9 +22,9 @@ BuildRequires:	GConf2-devel >= 2.0
 %endif
 BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
 BuildRequires:	autoconf >= 2.57
-BuildRequires:	automake
+BuildRequires:	automake >= 1:1.7
 BuildRequires:	cairo-devel >= 1.0
-BuildRequires:	dbus-devel >= 0.35
+BuildRequires:	dbus-glib-devel
 BuildRequires:	glib2-devel >= 2.0
 # <sys/inotify.h>
 BuildRequires:	glibc-devel >= 6:2.4
@@ -33,8 +33,10 @@ BuildRequires:	libfuse-devel >= 2.2
 BuildRequires:	libpng-devel
 BuildRequires:	librsvg-devel >= 1:2.14.0
 BuildRequires:	libtool
+BuildRequires:	libxml2-devel
 BuildRequires:	libxcb-devel
 BuildRequires:	libxslt-devel
+BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
 BuildRequires:	startup-notification-devel >= 0.7
 BuildRequires:	xorg-lib-libSM-devel
@@ -46,7 +48,6 @@ BuildRequires:	xorg-lib-libXres-devel
 %if %{with gtk}
 BuildRequires:	gtk+2-devel >= 2:2.8.0
 BuildRequires:	libwnck-devel >= 2.18.1
-BuildRequires:	pango-devel >= 1.10.0
 BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
 %if %{with gnome}
 BuildRequires:	control-center-devel >= 2.0
@@ -54,7 +55,7 @@ BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-menus-devel
 %endif
 %if %{with metacity}
-BuildRequires:	metacity-devel >= 2.17.0
+BuildRequires:	metacity-devel >= 2.18.0
 %endif
 %endif
 %if %{with kde}
@@ -65,6 +66,7 @@ BuildRequires:	qt-devel >= 1:3.0
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	beryl-core
+Obsoletes:	compiz-kconfig
 Obsoletes:	compiz-opacity
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -183,7 +185,7 @@ Window decorator for KDE.
 Dekorator okien dla KDE.
 
 # for gconf subpackage
-%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify kconfig minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
+%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
 %prep
 %setup -q
@@ -293,6 +295,8 @@ done
 %files gnome-settings
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
+%{_datadir}/gnome-control-center/keybindings/50-compiz-desktop-key.xml
+%{_datadir}/gnome-control-center/keybindings/50-compiz-key.xml
 %{_datadir}/wm-properties/compiz.desktop
 %endif
 
