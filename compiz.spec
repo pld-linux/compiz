@@ -16,7 +16,7 @@ Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
 # Source0-md5:	7e6edfdbf0dc46b135313440edae7a53
 Patch0:		%{name}-DESTDIR.patch
-URL:		http://xorg.freedesktop.org/
+URL:		http://www.compiz-fusion.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
