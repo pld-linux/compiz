@@ -102,6 +102,7 @@ Requires:	%{name}-libs = %{version}-%{release}
 # (by compiz.pc; header requires only: OpenGL-devel, startup-notification-devel, damageproto, xextproto, libX11-devel)
 Requires:	OpenGL-devel
 Requires:	libpng-devel
+Requires:	libxslt-devel
 Requires:	startup-notification-devel >= 0.7
 Requires:	xorg-lib-libSM-devel
 Requires:	xorg-lib-libXcomposite-devel
