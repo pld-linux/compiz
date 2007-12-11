@@ -20,8 +20,8 @@ URL:		http://compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
-BuildRequires:	Mesa-libGL-devel >= 6.5-1.20060411.2
-BuildRequires:	Mesa-libGLU-devel >= 6.5-1.20060411.2
+BuildRequires:	OpenGL-libGL-devel
+BuildRequires:	OpenGL-libGLU-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1:1.7
 BuildRequires:	cairo-devel >= 1.0
