@@ -66,7 +66,6 @@ BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
-Obsoletes:	beryl-core
 Obsoletes:	compiz-kconfig
 Obsoletes:	compiz-opacity
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
@@ -87,6 +86,7 @@ wyłączając Gnome i KDE.
 Summary:	Compiz libraries
 Summary(pl.UTF-8):	Biblioteki compiza
 Group:		X11/Applications
+Obsoletes:	beryl-core
 Conflicts:	compiz < 0.5.2-2
 
 %description libs
