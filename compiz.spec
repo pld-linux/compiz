@@ -20,8 +20,8 @@ URL:		http://compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
-BuildRequires:	OpenGL-libGL-devel
-BuildRequires:	OpenGL-libGLU-devel
+BuildRequires:	OpenGL-devel >= 2.1
+BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1:1.7
 BuildRequires:	cairo-devel >= 1.0
@@ -144,6 +144,18 @@ GConf plugin for Compiz (GConf control backend).
 %description gconf -l pl.UTF-8
 Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
 
+%package svg
+Summary:	SVG plugin for Compiz
+Summary(pl.UTF-8):	Wtyczka SVG dla Compiza
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+
+%description svg
+SVG image loader plugin for Compiz.
+
+%description svg -l pl.UTF-8
+Wtyczka wczytująca obrazy SVG dla Compiza.
+
 %package gnome-settings
 Summary:	Compiz settings for GNOME control panel
 Summary(pl.UTF-8):	Ustawienia compiza dla panelu sterowania GNOME
@@ -257,13 +269,16 @@ done
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %exclude %{_libdir}/compiz/libfs.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
+%exclude %{_libdir}/compiz/libsvg.so
 %{_datadir}/compiz
 %exclude %{_datadir}/compiz/fs.xml
 %exclude %{_datadir}/compiz/gconf.xml
+%exclude %{_datadir}/compiz/svg.xml
 
 %files libs
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libdecoration.so.0
 %dir %{_libdir}/compiz
 
 %files devel
@@ -292,6 +307,11 @@ done
 # checked by compiz-fusion-plugins-* (with non-default --enable-schemas only)
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
+
+%files svg
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/compiz/libsvg.so
+%{_datadir}/compiz/gconf.xml
 
 %if %{with gnome} && %{with gtk}
 %files gnome-settings
