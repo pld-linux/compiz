@@ -5,16 +5,17 @@
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
 %bcond_without	kde		# kde-window-decorator
+%bcond_with	kde4
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
-Version:	0.6.2
-Release:	2
+Version:	0.7.0
+Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
-# Source0-md5:	7e6edfdbf0dc46b135313440edae7a53
+# Source0-md5:	f87e17d62b22ab2db5bdf9326c480ee7
 Patch0:		%{name}-DESTDIR.patch
 URL:		http://compiz.org/
 %if %{with gconf} || %{with gtk}
@@ -51,7 +52,7 @@ BuildRequires:	gtk+2-devel >= 2:2.8.0
 BuildRequires:	libwnck-devel >= 2.18.1
 BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
 %if %{with gnome}
-BuildRequires:	control-center-devel >= 2.0
+BuildRequires:	gnome-control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-menus-devel
 %endif
@@ -64,6 +65,9 @@ BuildRequires:	dbus-qt-devel
 BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
+%endif
+%if %{with kde4}
+BuildRequires:	FIXME
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	compiz-kconfig
@@ -198,6 +202,19 @@ Window decorator for KDE.
 %description kde-decorator -l pl.UTF-8
 Dekorator okien dla KDE.
 
+%package kde4-decorator
+Summary:	Window decorator for KDE 4
+Summary(pl.UTF-8):	Dekorator okien dla KDE 4
+Group:		X11/Applications
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	aquamarine
+
+%description kde4-decorator
+Window decorator for KDE 4.
+
+%description kde4-decorator -l pl.UTF-8
+Dekorator okien dla KDE 4.
+
 # for gconf subpackage
 %define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
@@ -220,6 +237,7 @@ QTLIB=%{_libdir}; export QTLIB
 	%{!?with_gnome:--disable-gnome} \
 	%{!?with_gtk:--disable-gtk} \
 	%{!?with_kde:--disable-kde} \
+	%{!?with_kde4:--disable-kde4} \
 	%{!?with_metacity:--disable-metacity}
 
 %{__make}
@@ -288,6 +306,7 @@ done
 %{_includedir}/compiz
 %{_pkgconfigdir}/compiz.pc
 %{_pkgconfigdir}/libdecoration.pc
+%{?with_kde:%{_pkgconfigdir}/compiz-kconfig.pc}
 # checked by compiz-fusion-plugins-extra
 %{_pkgconfigdir}/compiz-cube.pc
 # checked by compiz-fusion-plugins-main
@@ -335,4 +354,12 @@ done
 %files kde-decorator
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/kde-window-decorator
+%{_datadir}/config.kcfg/*.kcfg
+%{_datadir}/config/compizrc
+%endif
+
+%if %{with kde4}
+%files kde4-decorator
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/kde4-window-decorator
 %endif
