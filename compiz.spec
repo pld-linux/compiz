@@ -5,7 +5,7 @@
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
 %bcond_without	kde		# kde-window-decorator
-%bcond_with	kde4
+%bcond_with	kde4		# kde4-window-decorator
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
