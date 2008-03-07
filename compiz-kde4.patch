@@ -1,0 +1,11 @@
+--- kde/window-decorator-kde4/Makefile.am	2008-02-07 03:51:02.000000000 +0100
++++ kde/window-decorator-kde4/Makefile.am-new	2008-03-07 19:57:47.000000000 +0100
+@@ -31,7 +31,7 @@
+ 
+ kde4_window_decorator_program = kde4-window-decorator
+ 
+-INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include @KDE4_WINDOW_DECORATOR_CFLAGS@ @KDE4_CFLAGS@
++INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include @KDE4_WINDOW_DECORATOR_CFLAGS@ @KDE4_CFLAGS@ -I/usr/include/KDE
+ 
+ bin_PROGRAMS = $(kde4_window_decorator_program)
+ 
