@@ -18,6 +18,7 @@ Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
 # Source0-md5:	8953ab87beef24e0a3331a186ab6b50c
 Patch0:		%{name}-DESTDIR.patch
+Patch1:		%{name}-kde4.patch
 URL:		http://compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
@@ -68,7 +69,8 @@ BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
 %endif
 %if %{with kde4}
-BuildRequires:	FIXME
+BuildRequires:	kde4-kdelibs-devel
+BuildRequires:	kde4-kdebase-workspace-devel
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	compiz-kconfig
@@ -222,6 +224,7 @@ Dekorator okien dla KDE 4.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p0
 
 %build
 %{__intltoolize}
