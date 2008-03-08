@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.2
-Release:	0.1
+Release:	0.2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -292,7 +292,9 @@ done
 %exclude %{_libdir}/compiz/libfs.so
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %exclude %{_libdir}/compiz/libsvg.so
-%{_datadir}/compiz
+%{_datadir}/compiz/*.xml
+%{_datadir}/compiz/*.png
+%{_datadir}/compiz/schemas.xslt
 %exclude %{_datadir}/compiz/fs.xml
 %exclude %{_datadir}/compiz/gconf.xml
 %exclude %{_datadir}/compiz/svg.xml
@@ -302,6 +304,7 @@ done
 %attr(755,root,root) %{_libdir}/libdecoration.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libdecoration.so.0
 %dir %{_libdir}/compiz
+%dir %{_datadir}/compiz
 
 %files devel
 %defattr(644,root,root,755)
