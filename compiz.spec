@@ -29,6 +29,7 @@ BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1:1.7
 BuildRequires:	cairo-devel >= 1.0
 BuildRequires:	dbus-glib-devel
+BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel >= 2.0
 # <sys/inotify.h>
 BuildRequires:	glibc-devel >= 6:2.4
