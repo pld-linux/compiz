@@ -11,12 +11,12 @@ Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
-Version:	0.7.2
-Release:	0.2
+Version:	0.7.4
+Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
-# Source0-md5:	8953ab87beef24e0a3331a186ab6b50c
+# Source0-md5:	f8329a683e56003a4654484e00facd1c
 Patch0:		%{name}-DESTDIR.patch
 Patch1:		%{name}-kde4.patch
 URL:		http://compiz.org/
