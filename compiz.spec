@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.4
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -291,6 +291,7 @@ done
 %attr(755,root,root) %{_bindir}/compiz
 %attr(755,root,root) %{_libdir}/compiz/*.so
 %exclude %{_libdir}/compiz/libfs.so
+%{?with_kde:%exclude %{_libdir}/compiz/libkconfig.so}
 %{?with_gconf:%exclude %{_libdir}/compiz/libgconf.so}
 %exclude %{_libdir}/compiz/libsvg.so
 %{_datadir}/compiz/*.xml
@@ -362,6 +363,7 @@ done
 %files kde-decorator
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/kde-window-decorator
+%attr(755,root,root) %{_libdir}/compiz/libkconfig.so
 %{_datadir}/config.kcfg/*.kcfg
 %{_datadir}/config/compizrc
 %endif
