@@ -155,9 +155,7 @@ Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
 Summary:	kconfig plugin for Compiz
 Summary(pl.UTF-8):	Wtyczka kconfig dla Compiza
 Group:		X11/Applications
-Requires(post,preun):	GConf2
 Requires:	%{name} = %{version}-%{release}
-Obsoletes:	beryl-core-gconf
 
 %description kconfig 
 kconfig plugin for Compiz (KDE control backend).
