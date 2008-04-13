@@ -4,7 +4,7 @@
 %bcond_without	gtk		# gtk window decorator
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
-%bcond_without	kde		# kde-window-decorator
+%bcond_without	kde		# kde-window-decorator and kconfig
 %bcond_with	kde4		# kde4-window-decorator
 #
 Summary:	OpenGL window and compositing manager
@@ -74,7 +74,6 @@ BuildRequires:	kde4-kdelibs-devel
 BuildRequires:	kde4-kdebase-workspace-devel
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
-Obsoletes:	compiz-kconfig
 Obsoletes:	compiz-opacity
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -151,6 +150,20 @@ GConf plugin for Compiz (GConf control backend).
 
 %description gconf -l pl.UTF-8
 Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
+
+%package kconfig 
+Summary:	kconfig plugin for Compiz
+Summary(pl.UTF-8):	Wtyczka kconfig dla Compiza
+Group:		X11/Applications
+Requires(post,preun):	GConf2
+Requires:	%{name} = %{version}-%{release}
+Obsoletes:	beryl-core-gconf
+
+%description kconfig 
+kconfig plugin for Compiz (KDE control backend).
+
+%description kconfig -l pl.UTF-8
+Wtyczka kconfig dla Compiza (backend sterujący oparty na KDE).
 
 %package svg
 Summary:	SVG plugin for Compiz
@@ -336,6 +349,14 @@ done
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
 
+%if %{with kde}
+%files kconfig
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/compiz/libkconfig.so
+%{_datadir}/config/compizrc
+%{_datadir}/config.kcfg/*.kcfg
+%endif
+
 %files svg
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/compiz/libsvg.so
@@ -363,9 +384,6 @@ done
 %files kde-decorator
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/kde-window-decorator
-%attr(755,root,root) %{_libdir}/compiz/libkconfig.so
-%{_datadir}/config.kcfg/*.kcfg
-%{_datadir}/config/compizrc
 %endif
 
 %if %{with kde4}
