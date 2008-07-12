@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.6
-Release:	2
+Release:	3
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -231,7 +231,7 @@ Window decorator for KDE 4.
 Dekorator okien dla KDE 4.
 
 # for gconf subpackage
-%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify minimize move place plane png regex resize rotate scale screenshot svg switcher video water wobbly zoom
+%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify minimize move place png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
 %prep
 %setup -q
