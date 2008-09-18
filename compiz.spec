@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.6
-Release:	3
+Release:	4
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -75,6 +75,7 @@ BuildRequires:	kde4-kdebase-workspace-devel
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	compiz-opacity
+Conflicts:	filesystem < 3.0-20
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
