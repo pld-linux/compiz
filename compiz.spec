@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.8
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -247,6 +247,7 @@ Dekorator okien dla KDE 4.
 %{__autoheader}
 %{__automake}
 QTLIB=%{_libdir}; export QTLIB
+QTDIR=%{_prefix}; export QTDIR
 %configure \
 	--disable-static \
 	--enable-librsvg \
