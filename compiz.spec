@@ -12,7 +12,7 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.7.8
-Release:	2
+Release:	3
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://xorg.freedesktop.org/releases/individual/app/%{name}-%{version}.tar.gz
@@ -264,7 +264,7 @@ QTDIR=%{_prefix}; export QTDIR
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	desktopfilesdir=%{_datadir}/wm-properties \
+	desktopfilesdir=%{_datadir}/gnome/wm-properties \
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
@@ -370,7 +370,7 @@ done
 %attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
 %{_datadir}/gnome-control-center/keybindings/50-compiz-desktop-key.xml
 %{_datadir}/gnome-control-center/keybindings/50-compiz-key.xml
-%{_datadir}/wm-properties/compiz.desktop
+%{_datadir}/gnome/wm-properties/compiz.desktop
 %endif
 
 %if %{with gtk}
