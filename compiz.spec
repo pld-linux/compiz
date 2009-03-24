@@ -4,8 +4,8 @@
 %bcond_without	gtk		# gtk window decorator
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
-%bcond_without	kde		# kde-window-decorator and kconfig
-%bcond_with	kde4		# kde4-window-decorator
+%bcond_with	kde		# kde-window-decorator and kconfig
+%bcond_without	kde4		# kde4-window-decorator
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
@@ -49,17 +49,17 @@ BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
 BuildRequires:	xorg-lib-libXres-devel
+BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
 %if %{with gtk}
 BuildRequires:	gtk+2-devel >= 2:2.8.0
-BuildRequires:	libwnck-devel >= 2.18.1
-BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
+BuildRequires:	libwnck-devel >= 2.20.0
 %if %{with gnome}
 BuildRequires:	gnome-control-center-devel >= 2.0
 BuildRequires:	gnome-desktop-devel >= 2.0
 BuildRequires:	gnome-menus-devel
 %endif
 %if %{with metacity}
-BuildRequires:	metacity-devel >= 2.18.0
+BuildRequires:	metacity-devel >= 2.24.0
 %endif
 %endif
 %if %{with kde}
@@ -231,7 +231,7 @@ Window decorator for KDE 4.
 Dekorator okien dla KDE 4.
 
 # for gconf subpackage
-%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib ini inotify minimize move place png regex resize rotate scale screenshot svg switcher video water wobbly zoom
+%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib gnomecompat ini inotify minimize move obs place png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
 %prep
 %setup -q
@@ -262,7 +262,6 @@ QTDIR=%{_prefix}; export QTDIR
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} install \
-	desktopfilesdir=%{_datadir}/gnome/wm-properties \
 	DESTDIR=$RPM_BUILD_ROOT
 
 rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
@@ -368,7 +367,8 @@ done
 %attr(755,root,root) %{_libdir}/window-manager-settings/libcompiz.so
 %{_datadir}/gnome-control-center/keybindings/50-compiz-desktop-key.xml
 %{_datadir}/gnome-control-center/keybindings/50-compiz-key.xml
-%{_datadir}/gnome/wm-properties/compiz.desktop
+%{_datadir}/gnome/wm-properties/compiz-wm.desktop
+%{_desktopdir}/compiz.desktop
 %endif
 
 %if %{with gtk}
