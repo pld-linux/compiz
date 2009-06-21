@@ -4,15 +4,20 @@
 %bcond_without	gtk		# gtk window decorator
 %bcond_without	gnome		# gnome settings module
 %bcond_without	metacity	# metacity theme support
+%if "%{pld_release}" == "ti"
+%bcond_without	kde		# kde-window-decorator and kconfig
+%bcond_with	kde4		# kde4-window-decorator
+%else
 %bcond_with	kde		# kde-window-decorator and kconfig
 %bcond_without	kde4		# kde4-window-decorator
+%endif
 #
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.8.2
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://releases.compiz-fusion.org/core/%{name}-%{version}.tar.gz
