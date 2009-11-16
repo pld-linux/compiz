@@ -16,7 +16,7 @@ Release:	1
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://releases.compiz.org/%{version}/%{name}-%{version}.tar.bz2
-# Source0-md5:	a27e5da0a460a714ad4a6af7ad3cb93d
+# Source0-md5:	03fa78ce0c464f3a413b2a3b74f09559
 Patch0:		%{name}-kde4.patch
 URL:		http://www.compiz.org/
 %if %{with gconf} || %{with gtk}
