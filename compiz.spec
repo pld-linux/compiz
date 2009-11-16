@@ -67,6 +67,7 @@ BuildRequires:	dbus-qt-devel
 BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
 BuildRequires:	qt-devel >= 1:3.0
+BuildRequires:	qt4-build
 %endif
 %if %{with kde4}
 BuildRequires:	kde4-kdelibs-devel
@@ -151,13 +152,13 @@ GConf plugin for Compiz (GConf control backend).
 %description gconf -l pl.UTF-8
 Wtyczka GConf dla Compiza (backend sterujący oparty na GConfie).
 
-%package kconfig 
+%package kconfig
 Summary:	kconfig plugin for Compiz
 Summary(pl.UTF-8):	Wtyczka kconfig dla Compiza
 Group:		X11/Applications
 Requires:	%{name} = %{version}-%{release}
 
-%description kconfig 
+%description kconfig
 kconfig plugin for Compiz (KDE control backend).
 
 %description kconfig -l pl.UTF-8
