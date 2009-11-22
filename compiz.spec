@@ -22,8 +22,8 @@ URL:		http://www.compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
 %endif
-BuildRequires:	OpenGL-devel >= 2.1
 BuildRequires:	OpenGL-GLU-devel
+BuildRequires:	OpenGL-devel >= 2.1
 BuildRequires:	autoconf >= 2.57
 BuildRequires:	automake >= 1:1.7
 BuildRequires:	cairo-devel >= 1.0
@@ -37,8 +37,8 @@ BuildRequires:	libfuse-devel >= 2.2
 BuildRequires:	libpng-devel
 BuildRequires:	librsvg-devel >= 1:2.14.0
 BuildRequires:	libtool
-BuildRequires:	libxml2-devel
 BuildRequires:	libxcb-devel
+BuildRequires:	libxml2-devel
 BuildRequires:	libxslt-devel
 BuildRequires:	libxslt-progs
 BuildRequires:	pkgconfig
@@ -48,8 +48,8 @@ BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
 BuildRequires:	xorg-lib-libXinerama-devel
 BuildRequires:	xorg-lib-libXrandr-devel
-BuildRequires:	xorg-lib-libXres-devel
 BuildRequires:	xorg-lib-libXrender-devel >= 0.9.3
+BuildRequires:	xorg-lib-libXres-devel
 %if %{with gtk}
 BuildRequires:	gtk+2-devel >= 2:2.8.0
 BuildRequires:	libwnck-devel >= 2.20.0
@@ -64,14 +64,14 @@ BuildRequires:	metacity-devel >= 2.24.0
 %endif
 %if %{with kde}
 BuildRequires:	dbus-qt-devel
-BuildRequires:	kdelibs-devel
 BuildRequires:	kdebase-devel
+BuildRequires:	kdelibs-devel
 BuildRequires:	qt-devel >= 1:3.0
-BuildRequires:	qt4-build
 %endif
 %if %{with kde4}
-BuildRequires:	kde4-kdelibs-devel
 BuildRequires:	kde4-kdebase-workspace-devel
+BuildRequires:	kde4-kdelibs-devel
+BuildRequires:	qt4-build
 %endif
 Requires:	%{name}-libs = %{version}-%{release}
 Obsoletes:	compiz-opacity
@@ -79,16 +79,19 @@ Conflicts:	filesystem < 3.0-20
 Conflicts:	xorg-xserver-xgl < 0.0.20060505
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+# for gconf subpackage
+%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib gnomecompat ini inotify minimize move obs place png regex resize rotate scale screenshot svg switcher video water wobbly zoom
+
 %description
 Compiz is a compositing window manager that uses 3D graphics
-acceleration via OpenGL. It provides various new graphical effects
-and features on any desktop environment, including Gnome and KDE.
+acceleration via OpenGL. It provides various new graphical effects and
+features on any desktop environment, including Gnome and KDE.
 
 %description -l pl.UTF-8
 Compiz jest menedżerem okien obsługującym składanie, który używa
 akceleracji grafiki 3D przez OpenGL-a. Umożliwia on uzyskanie nowych
-efektów graficznych i możliwości w dowolnym środowisku, nie
-wyłączając Gnome i KDE.
+efektów graficznych i możliwości w dowolnym środowisku, nie wyłączając
+Gnome i KDE.
 
 %package libs
 Summary:	Compiz libraries
@@ -230,9 +233,6 @@ Window decorator for KDE 4.
 
 %description kde4-decorator -l pl.UTF-8
 Dekorator okien dla KDE 4.
-
-# for gconf subpackage
-%define	plugins annotate blur clone core cube dbus decoration fade fs gconf glib gnomecompat ini inotify minimize move obs place png regex resize rotate scale screenshot svg switcher video water wobbly zoom
 
 %prep
 %setup -q
