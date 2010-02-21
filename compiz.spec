@@ -12,12 +12,14 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.8.4
-Release:	2
+Release:	3
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://releases.compiz.org/%{version}/%{name}-%{version}.tar.bz2
 # Source0-md5:	03fa78ce0c464f3a413b2a3b74f09559
 Patch0:		%{name}-kde4.patch
+Patch1:		%{name}-libpng14.patch
+Patch2:		%{name}-kde44-api.patch
 URL:		http://www.compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
@@ -237,6 +239,8 @@ Dekorator okien dla KDE 4.
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p1
+%patch2 -p1
 
 %build
 %{__intltoolize}
