@@ -311,7 +311,6 @@ done
 %exclude %{_libdir}/compiz/libsvg.so
 %{_datadir}/compiz/*.xml
 %{_datadir}/compiz/*.png
-%{_datadir}/compiz/schemas.xslt
 %exclude %{_datadir}/compiz/fs.xml
 %exclude %{_datadir}/compiz/gconf.xml
 %exclude %{_datadir}/compiz/svg.xml
@@ -347,6 +346,7 @@ done
 %attr(755,root,root) %{_libdir}/compiz/libgconf.so
 %{_sysconfdir}/gconf/schemas/compiz-*.schemas
 %{_datadir}/compiz/gconf.xml
+%{_datadir}/compiz/schemas.xslt
 # checked by compiz-fusion-plugins-* (with non-default --enable-schemas only)
 %{_pkgconfigdir}/compiz-gconf.pc
 %endif
