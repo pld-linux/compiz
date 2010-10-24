@@ -18,6 +18,7 @@ Group:		X11/Applications
 Source0:	http://releases.compiz.org/%{version}/%{name}-%{version}.tar.bz2
 # Source0-md5:	1e284eade99ff310551d5919b6ba57c1
 Patch0:		%{name}-kde4.patch
+Patch1:		%{name}-no-gdk_display.patch
 URL:		http://www.compiz.org/
 %if %{with gconf} || %{with gtk}
 BuildRequires:	GConf2-devel >= 2.0
@@ -237,6 +238,7 @@ Dekorator okien dla KDE 4.
 %prep
 %setup -q
 %patch0 -p0
+%patch1 -p1
 
 %build
 %{__intltoolize}
