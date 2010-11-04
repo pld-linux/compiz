@@ -12,11 +12,13 @@ Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
 # note that even versions are STABLE
 Version:	0.8.6
-Release:	1
+Release:	2
 License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://releases.compiz.org/%{version}/%{name}-%{version}.tar.bz2
 # Source0-md5:	1e284eade99ff310551d5919b6ba57c1
+Source1:        compiz-gtk
+Source2:        compiz-gtk.desktop
 Patch0:		%{name}-kde4.patch
 Patch1:		%{name}-no-gdk_display.patch
 URL:		http://www.compiz.org/
@@ -272,6 +274,14 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/compiz/*.la
 rm -f $RPM_BUILD_ROOT%{_libdir}/window-manager-settings/*.la
 %endif
 
+%if %{with gtk}
+install %{SOURCE1} $RPM_BUILD_ROOT%{_bindir}
+desktop-file-install \
+	--vendor="" \
+	--dir $RPM_BUILD_ROOT%{_desktopdir} \
+	%{SOURCE2}
+%endif
+
 %find_lang %{name}
 
 %clean
@@ -377,7 +387,9 @@ done
 %if %{with gtk}
 %files gtk-decorator
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/compiz-gtk
 %attr(755,root,root) %{_bindir}/gtk-window-decorator
+%{_datadir}/applications/compiz-gtk.desktop
 %if %{with gconf}
 %{_sysconfdir}/gconf/schemas/gwd.schemas
 %endif

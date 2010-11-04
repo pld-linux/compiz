@@ -1,0 +1,32 @@
+#!/bin/bash
+
+function runCompiz() {
+	gtk-window-decorator &
+	if ( [ -e /usr/lib/compizconfig/backends/libgconf.so ] || [ -e /usr/lib64/compizconfig/backends/libgconf.so ] )
+        then
+                exec compiz --ignore-desktop-hints ccp $@
+        else
+        	exec compiz --ignore-desktop-hints glib gconf gnomecompat $@
+        fi
+}
+
+ISSW=`glxinfo | grep "Software Rasterizer" -c`
+
+# Try with direct rendering
+HAVETFP=`glxinfo | grep texture_from_pixmap -c`
+
+if ( [ $ISSW == 0 ] && [ $HAVETFP -gt 2 ] ); then 
+	runCompiz $@
+fi
+
+# Try again with indirect rendering
+export LIBGL_ALWAYS_INDIRECT=1
+
+HAVETFP=`glxinfo | grep texture_from_pixmap -c`
+
+if ( [ $ISSW == 0 ] && [ $HAVETFP -gt 2 ] ); then 
+	runCompiz $@
+fi
+
+# Fall back to metacity
+exec metacity $@
