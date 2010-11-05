@@ -6,7 +6,7 @@
 %bcond_without	metacity	# metacity theme support
 %bcond_with	kde		# kde-window-decorator and kconfig
 %bcond_without	kde4		# kde4-window-decorator
-#
+
 Summary:	OpenGL window and compositing manager
 Summary(pl.UTF-8):	OpenGL-owy zarządca okien i składania
 Name:		compiz
@@ -17,8 +17,8 @@ License:	GPL or MIT
 Group:		X11/Applications
 Source0:	http://releases.compiz.org/%{version}/%{name}-%{version}.tar.bz2
 # Source0-md5:	1e284eade99ff310551d5919b6ba57c1
-Source1:        compiz-gtk
-Source2:        compiz-gtk.desktop
+Source1:	%{name}-gtk
+Source2:	%{name}-gtk.desktop
 Patch0:		%{name}-kde4.patch
 Patch1:		%{name}-no-gdk_display.patch
 URL:		http://www.compiz.org/
@@ -389,7 +389,7 @@ done
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/compiz-gtk
 %attr(755,root,root) %{_bindir}/gtk-window-decorator
-%{_datadir}/applications/compiz-gtk.desktop
+%{_desktopdir}/compiz-gtk.desktop
 %if %{with gconf}
 %{_sysconfdir}/gconf/schemas/gwd.schemas
 %endif
